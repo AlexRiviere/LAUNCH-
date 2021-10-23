@@ -1,0 +1,9 @@
+
+welcome: "Welcome to Calculator! Enter your name:"
+valid_name: "Make sure to enter a valid name."
+first_num: "What's the first number?"
+not_a_num: "That isn't a number"
+second_num: "What's the second number?"
+
+
+# ... rest of file omitted for brevity

@@ -3,7 +3,17 @@
 #2 I'm not sure why they are different, i tried to make the last call similar to the 
 # =>  other calls and I don't see any difference. maybe because it is the last one
 # =>  you should present it in a difference way?
-#3 
+#3 i dont know what the question is asking, coming back to this one
+#4 is done, not pretty, i had to put the score and the test in three different places 
+# =>  which makes it hard to update. i want to consolidate but how can i update a global
+# =>  variable with a method?
+#5 is done, this was easy, make two global variables and replace all instances of 17 or 21
+# =>  with the constant variables
+
+WINNING_NUM = 31
+DEALER_STAND_AT = 27
+
+require "pry"
 
 SUITS = ['H', 'D', 'S', 'C']
 VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -33,14 +43,14 @@ def total(cards)
 
   # correct for Aces
   values.select { |value| value == "A" }.count.times do
-    sum -= 10 if sum > 21
+    sum -= 10 if sum > WINNING_NUM
   end
 
   sum
 end
 
 def busted?(cards)
-  total(cards) > 21
+  total(cards) > WINNING_NUM
 end
 
 # :tie, :dealer, :player, :dealer_busted, :player_busted
@@ -48,9 +58,9 @@ def detect_result(dealer_cards, player_cards)
   player_total = total(player_cards)
   dealer_total = total(dealer_cards)
 
-  if player_total > 21
+  if player_total > WINNING_NUM
     :player_busted
-  elsif dealer_total > 21
+  elsif dealer_total > WINNING_NUM
     :dealer_busted
   elsif dealer_total < player_total
     :player
@@ -83,6 +93,14 @@ def play_again?
   prompt "Do you want to play again? (y or n)"
   answer = gets.chomp
   answer.downcase.start_with?('y')
+end
+
+dealer_score = 0
+player_score = 0
+
+def print_score(dealer_score, player_score)
+  puts ""
+  puts "The dealer has #{dealer_score} wins and the player has #{player_score} wins"
 end
 
 loop do
@@ -121,6 +139,8 @@ loop do
       player_cards << deck.pop
       prompt "You chose to hit!"
       prompt "Your cards are now: #{player_cards}"
+      player_total = total(player_cards)
+      dealer_total = total(dealer_cards)
       prompt "Your total is now: #{player_total}"
     end
 
@@ -129,6 +149,9 @@ loop do
 
   if busted?(player_cards)
     display_result(dealer_cards, player_cards)
+    dealer_score += 1
+    print_score(dealer_score, player_score)
+    break if player_score >= 2 || dealer_score >= 2
     play_again? ? next : break
   else
     prompt "You stayed at #{player_total}"
@@ -138,7 +161,7 @@ loop do
   prompt "Dealer turn..."
 
   loop do
-    break if total(dealer_cards) >= 17
+    break if total(dealer_cards) >= DEALER_STAND_AT
 
     prompt "Dealer hits!"
     dealer_cards << deck.pop
@@ -151,6 +174,9 @@ loop do
   if busted?(dealer_cards)
     prompt "Dealer total is now: #{dealer_total}"
     display_result(dealer_cards, player_cards)
+    player_score += 1
+    print_score(dealer_score, player_score)
+    break if player_score >= 2 || dealer_score >= 2
     play_again? ? next : break
   else
     prompt "Dealer stays at #{dealer_total}"
@@ -165,7 +191,21 @@ loop do
   puts "=============="
 
   display_result(dealer_cards, player_cards)
-
+  
+  case detect_result(dealer_cards, player_cards)
+    when :player_busted || :dealer 
+      dealer_score += 1
+    when :player || :dealer_busted
+      player_score += 1
+    when :tie
+      player_score += 1
+      dealer_score += 1
+  end
+  
+  print_score(dealer_score, player_score)
+  
+  break if player_score >= 2 || dealer_score >= 2
+  
   #break unless play_again?
   play_again? ? next : break
 end

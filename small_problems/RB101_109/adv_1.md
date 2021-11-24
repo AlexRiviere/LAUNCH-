@@ -137,3 +137,160 @@ matrix row n . arr is returned from the method.
 Finally, the final_arr will be returned since it is the last line of the method. 
 
 
+
+
+
+
+
+
+
+
+
+
+#Transpose MxN
+
+
+
+'''
+def get_all_nth_elements(rows, n, matrix)
+  arr = []
+  0.upto(rows - 1){|row| arr << matrix[row][n]}
+  arr
+end
+
+def transpose(matrix)
+  rows = matrix.size
+  columns = matrix[0].size
+  final_arr = []
+  0.upto(columns - 1){|el| final_arr << get_all_nth_elements(rows, el, matrix)}
+  final_arr
+end
+'''
+
+
+
+same thing as above but one tweak, instead of running through the upto method in the transpose method definition (rows - 1) times, we will go to (columns - 1) since we'll need an array for a flexible number of
+columns
+
+
+
+
+
+
+
+
+
+
+
+#Rotating Matrices
+
+
+'''
+def extract_column(col, matrix, rows)
+  arr = []
+  (rows - 1).downto(0){|row| arr << matrix[row][col]}
+  arr
+end
+
+def rotate90(matrix)
+  columns = matrix.first.size
+  rows = matrix.size
+  arr = []
+  (0 ... columns).each do |col|
+    arr << extract_column(col, matrix, rows)
+  end
+  arr 
+end
+'''
+
+the rotate90 method is defined on line 195-203, its block spans lines196-202. Rotate90 accepts one argument which is a matrix of variable size. First, we get the number of columns by assigning the variable
+columns to the size of the first element in the matrix. Next we get the number of rows by assigning the variable to the size of the matrix. Next, we initialize an empty array where we will be returning
+our final return value. Next, we iterate from 0 upto but not including the number of columns becaues the indexes start at 0. We call the each method on thie range with a block parameter of col representing
+the column index we are addressing for the iteration. On each iteration, we are pushing the return value of calling extract_column to the Array arr. 
+
+The helper method extract_column accepts three arguments (col, matrix and rows). It first initiates an empty Array called arr. Then, the downto method is called on (rows - 1) since the indexes start at 0. 
+This will count down from rows - 1 to 0 and for each iteration, we have our block parameter defined as |row|. The integer at the index col of element 'row' in matrix is called each time. We started at 
+rows - 1 so we can count backwards. Then the array is returned
+
+at the end of the rotate90 method, the arr is returned. It is a new array that has left the original array untouched. 
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+def my_method(array)
+  if array.empty?
+    []
+  elsif array.size > 1
+    array.map do |value|
+      value * value
+    end
+  else
+    [7 * array.first]
+  end
+end
+'''
+
+
+The my_method method is defined on line 229 - 239. Its block spans 230- 238. It takes one argument, denoted by the parameter array. The block of this method is a conditional statement taht tests the
+size of the array and carries out evaluations based on that size. Line 230 tests if the array is empty, if it is, the method will return an empty array. Line 232 called the method size on the argument array
+and compared that return value to check if is was greater than 1, if it is, the method map will be called on the array. Map will iterate through each element of the array, and using the block parameter
+value to represetn the value of array's elements, it will return the result of multipluing each element by itself. Map will return a new array and that return value will be returned by the method because it will
+be the last value to be evaluated. If the size of the array is not 0 or is 1, the else condition will run which will return an array with one element. That element will be calculated by multiplying 7 by the 
+one and only element in array (which can be found by calling the first method on the array). That array will be returned because it will be the last line eevaluated in our method. 
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+def valid?(arr1, arr2)
+  if arr1.empty? && !arr2.empty?
+    arr2
+  elsif !arr1.empty? && arr2.empty?
+    arr1
+  else
+    []
+  end
+end
+
+def merge(arr1, arr2)
+  return valid?(arr1, arr2) if arr1.empty? || arr2.empty?
+  
+  arr = []
+  min = [arr1.min, arr2.min].min
+  counter = min
+  loop do
+    total = arr1.count(counter) + arr2.count(counter)
+    total.times { arr << counter }
+    counter += 1
+    break if arr.size == (arr1.size + arr2.size)
+  end
+  arr
+end
+'''
+
+
+
+
+THe merge method is defined between lines 272 - 285, it first checks to see if either array is empty, if thats true, it gives the arrays as arguments to the helper method is defined between lines 262 - 270
+Valid? returns the non empty array or an empty array if both arrays are empty. 
+On line 275, an empty result arr is assigned to an empty array. the minimum is found by calling min on both arrays, adding references to those in an array and calling min on that array. The variable counter is
+assigned to the variable min. The loop is started. Total is assigned to count of counter in both arrays, then the times method is called total times and the counter is pushed to the array that many times. 
+Counter is then incremented by 1. The break condition will be true when the arr size is equal to the size of the two given arrays combined. 
+Finally, the arr results array is returned. 

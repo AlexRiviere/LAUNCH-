@@ -415,4 +415,296 @@
 
 #Transpose MxN
 #problem
-#   fix the 
+#   fix the last method to transpose any matrix with any size
+#input: matrix of any size
+#output: matrix transposed
+#rules
+# =>  explicit  - should work with any matrix with at least 1 row and 1 column
+# =>  implicit  - not in place
+#data structure
+# =>  arrays
+#algorithm
+# =>  
+
+
+
+
+# def get_all_nth_elements(rows, n, matrix)
+#   arr = []
+#   0.upto(rows - 1){|row| arr << matrix[row][n]}
+#   arr
+# end
+
+# def transpose(matrix)
+#   rows = matrix.size
+#   columns = matrix[0].size
+#   final_arr = []
+#   0.upto(columns - 1){|el| final_arr << get_all_nth_elements(rows, el, matrix)}
+#   final_arr
+# end
+
+
+# #test cases
+# p transpose([[1, 2, 3, 4, 5], [4, 3, 2, 1, 0], [3, 7, 8, 6, 2]]) == [[1, 4, 3], [2, 3, 7], [3, 2, 8], [4, 1, 6], [5, 0, 2]]
+# p transpose([[1, 2, 3, 4]]) == [[1], [2], [3], [4]]
+# p transpose([[1], [2], [3], [4]]) == [[1, 2, 3, 4]]
+
+# p transpose([[1]]) == [[1]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Rotating Matrices
+#problem
+# =>  given a matrix, rotate the lines 90 degrees
+#input: matrix
+#output: matrix rotated 90 degrees
+#rules
+# =>  explicit  - produce new matrix
+# =>              rotation of non-square matrix makes a rectangle in the opposite way
+#data structure
+# =>  nested array
+#Algorithm - high level
+# =>  extract each column from initial array starting from the last number (in last row)
+# =>    going to first number in first row
+# =>  get those into an array and return the arrray
+
+#helper method
+# =>  given matrix and index, extract the columns backwards
+# =>  initialize empty array
+# =>  index will represent which COLUMN to extract
+# =>  start from last row to 0, get the index specified and push to array
+# =>  return array
+
+#real algo
+# =>  initialize empty arr
+# =>  get the size of the input (how many rows)
+# =>  0 up to size each  number of times, loop through input
+# =>    pass matrix to the helper method with the index, 
+# =>    add return value to the empty array
+# =>  return arr
+
+# def extract_column(col, matrix, rows)
+#   arr = []
+#   (rows - 1).downto(0){|row| arr << matrix[row][col]}
+#   arr
+# end
+
+# def rotate90(matrix)
+#   columns = matrix.first.size
+#   rows = matrix.size
+#   arr = []
+#   (0 ... columns).each do |col|
+#     arr << extract_column(col, matrix, rows)
+#   end
+#   arr 
+# end
+
+
+
+# #test cases
+# matrix1 = [
+#   [1, 5, 8],
+#   [4, 7, 2],
+#   [3, 9, 6]
+# ]
+
+# matrix2 = [
+#   [3, 7, 4, 2],
+#   [5, 1, 0, 8]
+# ]
+
+# new_matrix1 = rotate90(matrix1)
+# new_matrix2 = rotate90(matrix2)
+# new_matrix3 = rotate90(rotate90(rotate90(rotate90(matrix2))))
+
+# p new_matrix1 == [[3, 4, 1], [9, 7, 5], [6, 2, 8]]
+# p new_matrix2 == [[5, 3], [1, 7], [0, 4], [8, 2]]
+# p new_matrix3 == matrix2
+
+
+
+
+
+#things i notice
+# =>  if the matrix has an odd num of columns
+# =>    first column becomes top row, top row becomes right column, right column becomes
+# =>    bottom row
+# =>  in matrix w odd num of columns
+# =>    new pattern is first row of ouptut is first column backward, second row is second
+# =>    column backward, etc
+# =>  this is actually true for the non odd as well
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Fix the Bug
+#problem
+# =>  look at the program dn find the bug
+
+
+
+# def my_method(array)
+#   if array.empty?
+#     []
+#   elsif array.size > 1
+#     array.map do |value|
+#       value * value
+#     end
+#   else
+#     [7 * array.first]
+#   end
+# end
+
+# p my_method([])
+# p my_method([3])
+# p my_method([3, 4])
+# p my_method([5, 6, 7])
+
+#it is supposed to print
+
+# []
+# [21]
+# [9, 16]
+# [25, 36, 49]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Merge Sorted Lists
+#problem
+# =>  given two sorted arrays, return a new array that has all elements from both arrays sorted
+#input: two arrays
+#output: one array, sorted
+#rules
+# =>  explicit  - cant sort the result array, have to build one array at a time
+# =>              cant mutate the input arrays
+# =>  implicit  - if one array is empty, return the other array
+# =>              if there are duplicates, include all duplicates
+#data strucutre
+# =>  array / hash?
+#algorithm
+# =>  edge cases
+# =>    if arr1.empty? && !arr2.empty?
+# =>      return arr2
+# =>    if !arr1.empty? && arr2.empty?
+# =>      return arr1
+# =>  initialize empty array = arr
+# =>  get the min of both arrays and add to arr
+# =>  test to see if there are duplicates, add dupes to arr
+# =>    count mins in each array
+# =>    add to arr
+# =>  counter = min + 1
+# =>  loop 
+# =>    count1 = count counter in arr1
+# =>    count2 = count counter in arr2
+# =>    total = count1 + count2
+# =>    total.times add counter to arr
+# =>    counter += 1
+# =>    break if arr = arr1.size + arr2.size
+# =>  return arr
+
+
+# require 'pry'
+
+# def valid?(arr1, arr2)
+#   if arr1.empty? && !arr2.empty?
+#     arr2
+#   elsif !arr1.empty? && arr2.empty?
+#     arr1
+#   else
+#     []
+#   end
+# end
+
+# def merge(arr1, arr2)
+#   return valid?(arr1, arr2) if arr1.empty? || arr2.empty?
+  
+#   arr = []
+#   min = [arr1.min, arr2.min].min
+#   counter = min
+#   loop do
+#     total = arr1.count(counter) + arr2.count(counter)
+#     total.times { arr << counter }
+#     counter += 1
+#     break if arr.size == (arr1.size + arr2.size)
+#   end
+#   arr
+# end
+
+
+
+
+# #test cases
+# p merge([1, 5, 9], [2, 6, 8]) == [1, 2, 5, 6, 8, 9]
+# p merge([1, 1, 3], [2, 2]) == [1, 1, 2, 2, 3]
+# p merge([1, 1, 3], [1, 2, 2]) == [1, 1, 1, 2, 2, 3]
+# p merge([], [1, 4, 5]) == [1, 4, 5]
+# p merge([1, 4, 5], []) == [1, 4, 5]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Merge Sort
+#problem
+# =>  

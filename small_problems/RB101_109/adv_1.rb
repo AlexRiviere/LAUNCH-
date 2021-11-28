@@ -707,4 +707,213 @@
 
 #Merge Sort
 #problem
-# =>  
+# =>  sort the given array using merge sort
+# =>  input: unsorted array
+# =>  output: sorted array 
+#rules
+# =>  explicit  - data may be all nums or all strings
+# =>              merge sort is recursive, breaking down elements into nested sub arrays
+# =>                then combining those arrays in sorted order
+# =>              use merge method you used in previous exercise
+#notes on merge sort
+# =>  We know that merge sort first divides the whole array iteratively into equal 
+# =>    halves unless the atomic values are achieved. 
+#data structure
+# => arrays and recursion
+#algorithm
+# =>  if there is only 1 element in the list, it is sorted, 
+# =>  set one var to the first half of the array
+# =>  set another var to the second half of the array
+# =>  reassign the first var to a recursive method mergesort(var1)
+# =>  reassign the second var to a recursive method mergesort(var2)
+# =>  endign with return using both arrays are arguments to the merge metho from last problem
+
+
+# def merge_sort(arr)
+#   return arr if arr.size == 1
+
+#   first_half = arr[0 .. ((arr.size / 2) - 1)]
+#   second_half = arr[(arr.size / 2) .. -1]
+  
+#   first_half = merge_sort(first_half)
+#   second_half = merge_sort(second_half)
+  
+#   return merge(first_half, second_half)
+# end
+
+
+
+# def merge(array1, array2)
+#   index2 = 0
+#   result = []
+
+#   array1.each do |value|
+#     while index2 < array2.size && array2[index2] <= value
+#       result << array2[index2]
+#       index2 += 1
+#     end
+#     result << value
+#   end
+
+#   result.concat(array2[index2..-1])
+# end
+
+
+
+
+
+# #test cases
+
+# p merge_sort([9, 5, 7, 1]) == [1, 5, 7, 9]
+# p merge_sort([5, 3]) == [3, 5]
+# p merge_sort([6, 2, 7, 1, 4]) == [1, 2, 4, 6, 7]
+# p merge_sort([7, 3, 9, 15, 23, 1, 6, 51, 22, 37, 54, 43, 5, 25, 35, 18, 46]) == [1, 3, 5, 6, 7, 9, 15, 18, 22, 23, 25, 35, 37, 43, 46, 51, 54]
+# p merge_sort(%w(Sue Pete Alice Tyler Rachel Kim Bonnie)) == %w(Alice Bonnie Kim Pete Rachel Sue Tyler)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Egyptian Fractions
+#problem
+# =>  write two methods, one takes a rational number as an arg, (rational num is 1 / a number)
+# =>    and returns an array of the denominators that are part of an Egyptian fraction rep
+# =>    of the number
+# =>  another method that takes an array of nums in the same format, and calculates the resulting
+# =>  rational number
+
+#PEDAC for unegyptian method
+#input: array on integers repping denominators
+#output: the resulting rational number
+#rules
+# =>  explicit  - you need to use the Rational class provided by Ruby
+#data structure
+# =>  array, sum
+#algorithm
+# =>  take array, sum all numbers as denominators
+
+def unegyptian(arr)
+  arr.reduce{|sum, denom| sum + Rational(1, denom )}
+end
+
+# #test cases
+# p unegyptian([1, 2, 3, 6]) == Rational(2, 1)
+# p unegyptian([1, 2, 3, 4, 5])
+# p unegyptian([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 230, 57960])
+
+
+
+#PEDAC for egyptian method
+#input: Rational number
+#output: array of denominators that, when made into rational nums, add up to given num
+#rules
+# =>  explicit  - 
+#data strucutre
+# =>  array, loop 
+#algorithm
+# =>  initialize empty arr
+# =>  initialize sum var = 0
+# =>  initiatlize counter var = 1
+# =>  loop 
+# =>    break if sum == given rational  num
+# =>    if sum + 1/counter > given num
+# =>      next
+# =>    else
+# =>      add counter to arr, add 1/counter to sum 
+# =>    increment counter
+
+# this worked, trying to refactor below
+
+# def unegyptian(arr)
+#   arr.reduce(0) {|sum, denom| sum + Rational(1, denom )}
+# end
+
+# def egyptian(num)
+#   arr = []
+#   sum = 0
+#   counter = 0
+#   loop do 
+#     break if sum == num
+#     counter += 1
+#     if (sum + Rational(1, counter)) <= num
+#       arr << counter
+#       sum += Rational(1, counter)
+#     end 
+#   end
+#   arr 
+# end
+
+
+# #test cases
+
+
+# # p egyptian(Rational(2, 1))    # -> [1, 2, 3, 6]
+# # p egyptian(Rational(137, 60)) # -> [1, 2, 3, 4, 5]
+# # p egyptian(Rational(3, 1))    # -> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 230, 57960]
+# # p egyptian(Rational(1, 2))
+# # p unegyptian([2])
+# p unegyptian(egyptian(Rational(1, 2)))      == Rational(1, 2)
+# p unegyptian(egyptian(Rational(3, 4)))      == Rational(3, 4)
+# p unegyptian(egyptian(Rational(39, 20)))    == Rational(39, 20)
+# p unegyptian(egyptian(Rational(127, 130)))  == Rational(127, 130)
+# p unegyptian(egyptian(Rational(5, 7)))    == Rational(5, 7)
+# p unegyptian(egyptian(Rational(1, 1)))    == Rational(1, 1)
+# p unegyptian(egyptian(Rational(2, 1)))    == Rational(2, 1)
+# p unegyptian(egyptian(Rational(3, 1)))    == Rational(3, 1)
+
+
+
+
+
+
+
+#refactored
+
+# def unegyptian(arr)
+#   arr.reduce(0) {|sum, denom| sum + Rational(1, denom )}
+# end
+
+# def egyptian(num)
+#   arr = []
+#   sum, counter = 0, 0
+  
+#   while sum < num 
+#     counter += 1
+#     if (sum + Rational(1, counter)) <= num
+#       arr << counter
+#       sum += Rational(1, counter)
+#     end 
+#   end
+#   arr 
+# end
+
+
+# #test cases
+
+
+# # p egyptian(Rational(2, 1))    # -> [1, 2, 3, 6]
+# # p egyptian(Rational(137, 60)) # -> [1, 2, 3, 4, 5]
+# # p egyptian(Rational(3, 1))    # -> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 230, 57960]
+# # p egyptian(Rational(1, 2))
+# # p unegyptian([2])
+# p unegyptian(egyptian(Rational(1, 2)))      == Rational(1, 2)
+# p unegyptian(egyptian(Rational(3, 4)))      == Rational(3, 4)
+# p unegyptian(egyptian(Rational(39, 20)))    == Rational(39, 20)
+# p unegyptian(egyptian(Rational(127, 130)))  == Rational(127, 130)
+# p unegyptian(egyptian(Rational(5, 7)))    == Rational(5, 7)
+# p unegyptian(egyptian(Rational(1, 1)))    == Rational(1, 1)
+# p unegyptian(egyptian(Rational(2, 1)))    == Rational(2, 1)
+# p unegyptian(egyptian(Rational(3, 1)))    == Rational(3, 1)

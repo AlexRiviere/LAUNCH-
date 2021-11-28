@@ -294,3 +294,117 @@ On line 275, an empty result arr is assigned to an empty array. the minimum is f
 assigned to the variable min. The loop is started. Total is assigned to count of counter in both arrays, then the times method is called total times and the counter is pushed to the array that many times. 
 Counter is then incremented by 1. The break condition will be true when the arr size is equal to the size of the two given arrays combined. 
 Finally, the arr results array is returned. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Merge Sort
+
+
+
+'''
+def merge_sort(arr)
+  return arr if arr.size == 1
+
+  first_half = arr[0 .. ((arr.size / 2) - 1)]
+  second_half = arr[(arr.size / 2) .. -1]
+  
+  first_half = merge_sort(first_half)
+  second_half = merge_sort(second_half)
+  
+  return merge(first_half, second_half)
+end
+
+
+
+def merge(array1, array2)
+  index2 = 0
+  result = []
+
+  array1.each do |value|
+    while index2 < array2.size && array2[index2] <= value
+      result << array2[index2]
+      index2 += 1
+    end
+    result << value
+  end
+
+  result.concat(array2[index2..-1])
+end
+
+'''
+
+
+
+The program uses the merge method from the previous problem. Our merge_sort method is defiend 
+between lines 318 - 328. It starts by returning arr if the size is one. If it is larger than
+one, it is split between first half and second half, then those same halfs are reassigned 
+to themselves being use as arguments in a recursive merge_sort method. When those are sufficiently
+split (as in , when each half only has one element), then the last line of the method is called
+It invokes the merge method using array 1 and 2 as arguments, returning a merged and sorted
+array
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+def unegyptian(arr)
+  arr.reduce(0) {|sum, denom| sum + Rational(1, denom )}
+end
+
+def egyptian(num)
+  arr = []
+  sum, counter = 0, 0
+  
+  while sum < num 
+    counter += 1
+    if (sum + Rational(1, counter)) <= num
+      arr << counter
+      sum += Rational(1, counter)
+    end 
+  end
+  arr 
+end
+
+'''
+
+the unegyptian method is defined between lines 366 - 368. It accepts one argument represented by the arr parameter. The argument will come in teh form of an array. The method calls the reduce method on
+the given array argument, and initializes the sum to 0. In the block, two parameters are sum and denominator. In the block, the sum (which was initialized to 0) has a rational number added to it. 
+The rational number is made up of 1 and the denominators from the array. This method returns a Rational number and prints nothing. 
+
+The egyptian method is defined between lines 370 - 382. It accepts one argument represented by the num parameter. For the sake of precision, the argument should be a Rational number. The method first initializes
+an empty array, then parallel assigns two variables, sum and counter, to 0. Then the while loop starts with a condition of the sum being less than the given number. In the loop, the counter is first incrementeed.
+Then an if statment tests whether adding the rational number 1 / counter to sum will push sum over the given number. If it will, the loop starts again (incrementing the counter which makes the fraction smaller).
+If it won't, the counter is appended to the arr array and the assignment operator += is called on sum, and the ratioanl number with counter as the denominator is added to sum. the loop starts again until the 
+sum is equal to num. After the loop, the array of denominators is returned. 

@@ -10378,6 +10378,7 @@ Do not worry about case. All inputs will be lowercase.
 
 
 =begin
+https://www.codewars.com/kata/54e6533c92449cc251001667
 Implement the function unique_in_order which takes as argument a sequence and returns a list of items without any elements with the same value next to each other and preserving the original
 order of elements.
 
@@ -10672,6 +10673,8 @@ should return "found the needle at position 5"
 
 
 =begin
+Weight for weight
+https://www.codewars.com/kata/55c6126177c9441a570000cc
 My friend John and I are members of the "Fat to Fit Club (FFC)". John is worried because each month a list with the weights of members is published and each month he is the last 
 on the list which means he is the heaviest.
 
@@ -10914,6 +10917,7 @@ If a string contains all repeating characters, it should return an empty string 
 
 
 =begin
+https://www.codewars.com/kata/5270d0d18625160ada0000e4
 Greed is a dice game played with five six-sided dice. Your mission, should you choose to accept it, is to score a throw according to these rules. 
 You will always be given an array with five six-sided dice values.
 
@@ -10984,30 +10988,2552 @@ In some languages, it is possible to mutate the input to the function. This is s
 
 =end
 
-TRIPLE_SCORES = { 1 => 1000, 
-                  6 => 600,
-                  5 => 500,
-                  4 => 400,
-                  3 => 300,
-                  2 => 200  }
+# TRIPLE_SCORES = { 1 => 1000, 
+#                   6 => 600,
+#                   5 => 500,
+#                   4 => 400,
+#                   3 => 300,
+#                   2 => 200  }
 
 
-def score(arr_of_scores)
-  scores_as_string = arr_of_scores.join
-  triple = arr_of_scores.select { |num| arr_of_scores.count(num) >= 3 }[0]
-  final_score = 0
-  if !triple.nil?
-    final_score += TRIPLE_SCORES[triple]
-    3.times { |_| scores_as_string.sub!(triple.to_s, "") }
-  end
-  final_score += scores_as_string.count('1') * 100
-  final_score += scores_as_string.count('5') * 50
-end
+# def score(arr_of_scores)
+#   scores_as_string = arr_of_scores.join
+#   triple = arr_of_scores.select { |num| arr_of_scores.count(num) >= 3 }[0]
+#   final_score = 0
+#   if !triple.nil?
+#     final_score += TRIPLE_SCORES[triple]
+#     3.times { |_| scores_as_string.sub!(triple.to_s, "") }
+#   end
+#   final_score += scores_as_string.count('1') * 100
+#   final_score += scores_as_string.count('5') * 50
+# end
 
 
-a = 
-p score( [2, 3, 4, 6, 2] ) == 0 
-p score( [2, 2, 2, 3, 3] ) == 200 
-p score( [2, 4, 4, 5, 4] ) == 450
-p score( [2, 5, 5, 5, 5] ) == 550
+
+# p score( [2, 3, 4, 6, 2] ) == 0 
+# p score( [2, 2, 2, 3, 3] ) == 200 
+# p score( [2, 4, 4, 5, 4] ) == 450
+# p score( [2, 5, 5, 5, 5] ) == 550
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+=begin
+Sum of Pairs
+Given a list of integers and a single sum value, return the first two values (parse from the left please) in order of appearance that add up to form the sum.
+
+sum_pairs([11, 3, 7, 5],         10)
+#              ^--^      3 + 7 = 10
+== [3, 7]
+
+sum_pairs([4, 3, 2, 3, 4],         6)
+#          ^-----^         4 + 2 = 6, indices: 0, 2 *
+#             ^-----^      3 + 3 = 6, indices: 1, 3
+#                ^-----^   2 + 4 = 6, indices: 2, 4
+#  * entire pair is earlier, and therefore is the correct answer
+== [4, 2]
+
+sum_pairs([0, 0, -2, 3], 2)
+#  there are no pairs of values that can be added to produce 2.
+== None/nil/undefined (Based on the language)
+
+sum_pairs([10, 5, 2, 3, 7, 5],         10)
+#              ^-----------^   5 + 5 = 10, indices: 1, 5
+#                    ^--^      3 + 7 = 10, indices: 3, 4 *
+#  * entire pair is earlier, and therefore is the correct answer
+== [3, 7]
+Negative numbers and duplicate numbers can and will appear.
+
+NOTE: There will also be lists tested of lengths upwards of 10,000,000 elements. Be sure your code doesn't time out.
+
+
+# **Problem**
+# =>	objective: given a list of numbers and a sum, return the pair that occurs first and adds to the sum 
+
+# =>	input: array and integer
+
+# =>  	output: array of 2 elements integers
+
+# =>	rules:
+
+# =>		explicit	-	given an array of integers
+                  -  and a sum
+                  - return the first pairs that, when added, evaluates to the sum
+                  - return the first pair, meaning the entire pair occurs earlier in the sequence, meaning the index of the last element of the pair is smaller than the index of the other pairs elements
+                  - if there are no pairs that produce the sum, return nil
+                  - can be given duplicate and negaitve numbers
+
+# =>		implicit/edge cases - no pairs add to sum, return nil
+
+
+# **Data Structure**
+- given array, integer
+- array
+- return array
+
+# **Implementation Notes**
+-  #a.combination(2).to_a
+
+# **Algorithm**
+- initialize local var `combinations`, assign to a nested array of 2 element arrays with all the combinations from the given `list_of_nums`
+- initialize local var `last_index`, assign to the size of the given `list_of_nums` minus 1
+- initialize local var `counter`, assign to 1
+- indexes of last, []
+- from 1 upto last index `current`
+  - from current up to last index
+    - append num to indexes of last
+
+
+- then pop while iterating over `combinations`
+
+
+- iterate over the arrays in `combinations`
+  - append counter to the end of each array
+  - if counter < 5
+    - increment counter
+  - otherwise, counter = 1
+- sort `combinations` by the last elements
+- #detect the first element in `combinations` whose first two elements add up to the sum
+- return the first two elements in that array as an array
+
+=end
+
+
+# def sum_pairs(list_of_nums, sum)
+#   combinations = list_of_nums.combination(2).to_a
+#   last_index = list_of_nums.size - 1
+#   indexes_of_last = []
+  
+#   1.upto(last_index) do |current|
+#     current.upto(last_index) do |index|
+#       indexes_of_last << index
+#     end
+#   end  
+
+#   combinations.each { |array_pair|  array_pair << indexes_of_last.shift }
+#   winning_combo = combinations.sort_by { |array_pair| array_pair[2] }.detect { |array_pair| array_pair[0] + array_pair[1] == sum }
+#   winning_combo.nil? ? nil : winning_combo[0..1]
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# l1= [1, 4, 8, 7, 3, 15]
+# l2= [1, -2, 3, 0, -6, 1]
+# l3= [20, -13, 40]
+# l4= [1, 2, 3, 4, 1, 0]
+# l5= [10, 5, 2, 3, 7, 5]
+# l6= [4, -2, 3, 3, 4]
+# l7= [0, 2, 0]
+# l8= [5, 9, 13, -3]
+
+# p sum_pairs(l1, 8) == [1, 7]
+# p sum_pairs(l2, -6) == [0, -6]
+# p sum_pairs(l3, -7) == nil
+# p sum_pairs(l4, 2) == [1, 1]
+# p sum_pairs(l5, 10) == [3, 7]
+# p sum_pairs(l6, 8) == [4, 4]
+# p sum_pairs(l7, 0) == [0, 0]
+# p sum_pairs(l8, 10) == [13, -3]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+John and Mary want to travel between a few towns A, B, C ... Mary has on a sheet of paper a list of distances between these towns. ls = [50, 55, 57, 58, 60].
+John is tired of driving and he says to Mary that he doesn't want to drive more than t = 174 miles and he will visit only 3 towns.
+
+Which distances, hence which towns, they will choose so that the sum of the distances is the biggest possible to please Mary and John?
+
+Example:
+With list ls and 3 towns to visit they can make a choice between: [50,55,57],[50,55,58],[50,55,60],[50,57,58],[50,57,60],[50,58,60],[55,57,58],[55,57,60],[55,58,60],[57,58,60].
+
+The sums of distances are then: 162, 163, 165, 165, 167, 168, 170, 172, 173, 175.
+
+The biggest possible sum taking a limit of 174 into account is then 173 and the distances of the 3 corresponding towns is [55, 58, 60].
+
+The function chooseBestSum (or choose_best_sum or ... depending on the language) will take as parameters:
+t (maximum sum of distances, integer >= 0)
+k (number of towns to visit, k >= 1)
+ls (list of distances, all distances are positive or zero integers and this list has at least one element).
+The function returns the "best" sum ie the biggest possible sum of k distances less than or equal to the given limit t, if that sum exists, or otherwise nil
+
+
+Examples:
+ts = [50, 55, 56, 57, 58] choose_best_sum(163, 3, ts) -> 163
+
+xs = [50] choose_best_sum(163, 3, xs) -> nil (or null or ... or -1 (C++, C, Rust, Swift, Go, ...)
+
+ys = [91, 74, 73, 85, 73, 81, 87] choose_best_sum(230, 3, ys) -> 228
+
+Notes:
+try not to modify the input list of distances ls
+in some languages this "list" is in fact a string (see the Sample Tests).
+
+# **Problem**
+# =>	objective: given a max distance, a number of towns and a lsit of distances, return the biggest possible sum of the required distances that is equal to or under the max distance
+
+# =>	input: 2 integers, an array
+
+# =>  	output: an integer
+
+# =>	rules:
+
+# =>		explicit	-	given a max distance `t`, a number of towns to visit `k` and a list of distances `ls` as an array, return the best `k` number of town to visit while staying under or equal to `t`
+
+# =>		implicit/edge cases - if the sum doesnt exist, return nil
+                            - if the number of `ls` is less than the number `k`, return nil
+                            - don't modify the input
+
+
+# **Data Structure**
+- array to hold the possible combos
+
+
+# **Implementation Notes**
+- #combination(`k`)
+
+# **Algorithm**
+- initialize local var `combinations`, assign to all possible combinations of number `k` size from the `ls` list , convert to array
+- initialize local var `valid_combination_sums`, iterate over `combinations`, #map sums,  #select for sums that are less than or equal to the `t`
+- return the #max of `valid_combinations`,  
+
+
+- initailize local var `combinations`, assign to empty array 
+- from 0 up to 
+
+
+=end
+
+
+# def choose_best_sum(max_distance, num_of_towns, list_of_distances)
+#   combinations = list_of_distances.combination(num_of_towns).to_a
+#   combinations.map(&:sum).select { |sum| sum <= max_distance }.max
+# end
+
+
+
+
+
+
+# ts = [50, 55, 56, 57, 58]
+# p choose_best_sum(163, 3, ts) == 163
+# ts = [50]
+# p choose_best_sum(163, 3, ts) == nil
+# ts = [91, 74, 73, 85, 73, 81, 87]
+# p choose_best_sum(230, 3, ts) == 228
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+https://www.codewars.com/kata/5279f6fe5ab7f447890006a7/solutions/ruby
+pick peaks
+
+In this kata, you will write a function that returns the positions and the values of the "peaks" (or local maxima) of a numeric array.
+
+For example, the array arr = [0, 1, 2, 5, 1, 0] has a peak at position 3 with a value of 5 (since arr[3] equals 5).
+
+The output will be returned as an object with two properties: pos and peaks. Both of these properties should be arrays. If there is no peak in the given array, then the output should be {pos: [], peaks: []}.
+
+Example: pickPeaks([3, 2, 3, 6, 4, 1, 2, 3, 2, 1, 2, 3]) should return {pos: [3, 7], peaks: [6, 3]} (or equivalent in other languages)
+
+All input arrays will be valid integer arrays (although it could still be empty), so you won't need to validate the input.
+
+The first and last elements of the array will not be considered as peaks (in the context of a mathematical function, we don't know what is after and before and therefore, we don't know if it is a peak or not).
+
+Also, beware of plateaus !!! [1, 2, 2, 2, 1] has a peak while [1, 2, 2, 2, 3] and [1, 2, 2, 2, 2] do not. 
+In case of a plateau-peak, please only return the position and value of the beginning of the plateau. 
+For example: pickPeaks([1, 2, 2, 2, 1]) returns {pos: [1], peaks: [2]} (or equivalent in other languages)
+
+Have fun!
+
+# **Problem**
+# =>	objective: given an array of integers, return a hash with the positions and vlaues of the peaks
+
+# =>	input: array of integers
+
+# =>  	output: hash 
+
+# =>	rules:
+
+# =>		explicit	-	given an array
+                  - find the indexes of the peaks and the values
+                  - return a hash with two key/value pairs pos, peaks
+                  - both values in the hash should be arrays
+                  - all input array are valid
+                  - can be empty
+                  - first and last elements of the array are not peaks 
+                  - if there are plateaus, return the position of the beginning plateaus
+                  - Also, beware of plateaus !!! [1, 2, 2, 2, 1] has a peak while [1, 2, 2, 2, 3] and [1, 2, 2, 2, 2] do not. 
+
+# =>		implicit/edge cases - no peak? {pos: [], peaks: []}
+                            - a number is a peak if the numbers directly next to it (left and right) are both lower than the number
+                            - if there are repeats, test the next numebr that is not the current number
+ 
+
+# **Data Structure**
+- array for intermediate
+- return the hash 
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- initialize local var `result`, assign to hash with keys 'pos' and 'peaks' and values both empty arrays
+- iterate over the elements in the given `int_arr`
+  - skip the first and last elements
+  - skip if this element is the same as the last element
+  - skip if either the previous num OR next num are bigger than current num
+  - initialize local var `prev_num`
+  - initialize local var `next_num`
+  
+  - if the next number is the same as this number, 
+    - compare this number to the next different number
+    - until next number does not equal this number OR you run out of elements (aka idx reaches the size), reassign next number to the next number  
+
+  - if the previous number and the next number are less than the current number
+    - add the 'pos' and 'peaks' to the `result` array
+
+  
+- return `result` hash
+
+=end
+
+# def pick_peaks(int_arr)
+#   result = {"pos" => [], "peaks" => []}
+#   int_arr.each_with_index do |int, idx|
+#     next if idx == 0 || idx == (int_arr.size - 1)
+#     next if int_arr[idx] == int_arr[idx - 1]
+#     next if (int_arr[idx-1] > int_arr[idx]) || (int_arr[idx+1] > int_arr[idx])
+#     prev_num = int_arr[idx-1] 
+#     next_num = int_arr[idx+1]
+    
+#     if next_num == int
+#       counter = 2
+#       loop do 
+#         next_num = int_arr[idx+counter]
+#         break if next_num != int || next_num.nil?
+#         counter += 1
+#       end
+#     end
+    
+#     return result if next_num.nil?
+    
+#     if (prev_num < int) && (next_num < int)
+#       result['pos'] << idx
+#       result['peaks'] << int
+#     end
+  
+#   end
+  
+#   result
+# end
+
+# def invalid(int, idx, int_arr)
+#   return true if idx == 0 || idx == (int_arr.size - 1)
+#   return true if int_arr[idx] == int_arr[idx - 1]
+#   return true if (int_arr[idx-1] > int_arr[idx]) || (int_arr[idx+1] > int_arr[idx])
+#   false
+# end
+
+
+# def pick_peaks(int_arr)
+#   result = {"pos" => [], "peaks" => []}
+#   int_arr.each_with_index do |int, idx|
+#     next if invalid(int, idx, int_arr)
+#     prev_num = int_arr[idx-1] 
+#     next_num = int_arr[(idx+1)..-1].detect{ |poss_next_num| poss_next_num != int }
+#     return result if next_num.nil?
+    
+#     if (prev_num < int) && (next_num < int)
+#       result['pos'] << idx
+#       result['peaks'] << int
+#     end
+  
+#   end
+  
+#   result
+# end
+
+
+# #NOT MINE
+
+# require 'pry'
+
+# def pick_peaks(array)
+#   pos = []
+#   peak = nil
+#   (1...array.size).each do |index|
+#     if array[index] > array[index-1]
+#       peak = index
+#       binding.pry
+#     elsif array[index] < array[index-1] && peak
+#       pos << peak
+#       peak = nil
+#       binding.pry
+#     end
+#   end
+
+#   { "pos" => pos, "peaks" => pos.map { |p| array[p] } }
+# end
+# p pick_peaks([1,2,3,6,4,1,2,3,2,1]) == {"pos"=>[3,7], "peaks"=>[6,3]}
+# # p pick_peaks([3,2,3,6,4,1,2,3,2,1,2,3]) == {"pos"=>[3,7], "peaks"=>[6,3]}
+# # p pick_peaks([3,2,3,6,4,1,2,3,2,1,2,2,2,1]) == {"pos"=>[3,7,10], "peaks"=>[6,3,2]}
+# # p pick_peaks([2,1,3,1,2,2,2,2,1]) == {"pos"=>[2,4], "peaks"=>[3,2]}
+# # p pick_peaks([2,1,3,1,2,2,2,2]) == {"pos"=>[2], "peaks"=>[3]}
+# # p pick_peaks([1, 2, 2, 2, 3]) == {"pos"=>[], "peaks"=>[]}
+# # p pick_peaks([1, 2, 2, 2, 2]) == {"pos"=>[], "peaks"=>[]}
+# # p pick_peaks([2, 2, 2, 2, 2]) == {"pos"=>[], "peaks"=>[]}
+# # p pick_peaks([2, 2, 3, 2, 2]) == {"pos"=>[2], "peaks"=>[3]}
+# # p pick_peaks([8, 14, 4, 1, 3, 1, 7, 7]) == {"pos"=>[1, 4], "peaks"=>[14, 3]}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Enough is enough!
+Alice and Bob were on a holiday. Both of them took many pictures of the places they've been, and now they want to show Charlie their entire collection. 
+However, Charlie doesn't like these sessions, since the motive usually repeats. He isn't fond of seeing the Eiffel tower 40 times. 
+He tells them that he will only sit during the session if they show the same motive at most N times. 
+Luckily, Alice and Bob are able to encode the motive as a number. Can you help them to remove numbers such that their list contains each number only up to N times, without changing the order?
+
+Task
+Given a list lst and a number N, create a new list that contains each number of lst at most N times without reordering. 
+For example if N = 2, and the input is [1,2,3,1,2,1,2,3], you take [1,2,3,1,2], drop the next [1,2] since this would lead to 1 and 2 being in the result 3 times, 
+and then take 3, which leads to [1,2,3,1,2,3].
+
+Example
+  delete_nth ([1,1,1,1],2) # return [1,1]
+  
+  delete_nth ([20,37,20,21],1) # return [20,37,21]
+  
+# **Problem**
+# =>	objective: given a list and an integer, return an array (maintaining the order of the orginal array) where no elements exceed the occurence number given 
+
+# =>	input: array and integer
+
+# =>  	output: array 
+
+# =>	rules:
+
+# =>		explicit	-	given an array and a max occurence number, 
+                  - return the array without any elements that occur more times than the given occurence max number. 
+                  - deleting the excess elements
+
+# =>		implicit/edge cases - 
+
+
+# **Data Structure**
+- array 
+
+# **Implementation Notes**
+- #count
+- #select
+
+# **Algorithm**
+- iterate over the given `lst`, with indexes
+  - if the slice of the array from 0 to this index has more than `max_times` occurences, nil
+  - otherwise true
+
+
+=end
+# def delete_nth(int_array, max_times)
+#   int_array.select.with_index do |int, idx|
+#     int_array[0..idx].count(int) > max_times ? false : true
+#   end  
+# end
+
+
+
+
+
+
+
+
+=begin
+algo
+- 
+
+=end
+
+
+# def delete_nth(int_array, max_times)
+  
+# end
+
+
+# p delete_nth([20,37,20,21], 1) #== [20,37,21]
+# # p delete_nth([1,1,3,3,7,2,2,2,2], 3) == [1, 1, 3, 3, 7, 2, 2, 2]
+# # p delete_nth([1,1,1,1],2) == [1,1]
+# # p delete_nth([20,37,20,21],1) == [20,37,21]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Complete the method/function so that it converts dash/underscore delimited words into camel casing. 
+The first word within the output should be capitalized only if the original word was capitalized (known as Upper Camel Case, also often referred to as Pascal case).
+
+Examples
+"the-stealth-warrior" gets converted to "theStealthWarrior"
+"The_Stealth_Warrior" gets converted to "TheStealthWarrior"
+
+
+# **Problem**
+# =>	objective: given a string, return the string in camel case
+
+# =>	input: string
+
+# =>  	output: string 
+
+# =>	rules:
+
+# =>		explicit	-	given an underscore or dash delimited string, convert to camel case
+                  - if the first letter of the given string is cap, same for the return value
+                  - 
+
+# =>		implicit/edge cases - empty string returns empty string
+                            - camel case, first is lowercase, rest are uppercase
+                            - except if the first in the gven string is uppercase
+ 
+
+# **Data Structure**
+- array 
+
+# **Implementation Notes**
+- #split
+
+# **Algorithm**
+- `split_words`, if the given string #include? a '-', split by the dash, 
+      -  otherwise, split by the '_'
+- `capitalized`, assign to iterating over split words, capitalizing all but the first
+- `result`, assign to joining words in `capitalized`, 
+- if the first letter of the given `string` is uppercase, make the first letter of the `result` uppercase
+- return uppercase
+
+
+
+
+=end
+
+# def to_camel_case(string)
+#   split_words = string.include?("-") ? string.split("-") : string.split("_")
+#   capitalized = split_words.map.with_index { |word, idx| idx == 0 ? word : word.capitalize }
+#   capitalized.join
+# end
+
+
+
+
+
+=begin
+  
+=end
+
+
+# def to_camel_case(string)
+#   string.split(/[^A-Za-z]/)  
+# end
+
+
+# p to_camel_case('')                     #== ''
+# p to_camel_case("the_stealth_warrior")  #== "theStealthWarrior"
+# p to_camel_case("The-Stealth-Warrior")  #== "TheStealthWarrior"
+# p to_camel_case("A-B-C")                #== "ABC"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+A Narcissistic Number is a positive number which is the sum of its own digits, each raised to the power of the number of digits in a given base. In this Kata, we will restrict ourselves to decimal (base 10).
+
+For example, take 153 (3 digits), which is narcisstic:
+
+    1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153
+and 1652 (4 digits), which isn't:
+
+    1^4 + 6^4 + 5^4 + 2^4 = 1 + 1296 + 625 + 16 = 1938
+The Challenge:
+
+Your code must return true or false (not 'true' and 'false') depending upon whether the given number is a Narcissistic number in base 10. This may be True and False in your language, e.g. PHP.
+
+Error checking for text strings or other invalid inputs is not required, only valid positive non-zero integers will be passed into the function.
+
+
+# **Problem**
+# =>	objective: 
+
+# =>	input: integer
+
+# =>  	output: boolean true flase
+
+# =>	rules:
+
+# =>		explicit	-	narcissistic is pos number, which is the sum of its own digits, each raised to the power of the number of digits 
+
+# =>		implicit/edge cases -
+
+
+# **Data Structure**
+- array of digits
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- `digits`, assign to an arrray of the digits in the given intger
+- `exponent`, assign to the number of digits in the given integer
+- sum the digits in `digits` raised to `exponent` and conditionally check if they are equal to the given integer
+ 
+
+
+=end
+
+# def narcissistic?(int)
+#   exponent = int.to_s.size
+#   int.digits.reduce(0) { |sum, digit| sum + (digit**exponent) } == int
+# end
+
+
+# p narcissistic?(5)        == true
+# p narcissistic?( 153 )    == true
+# p narcissistic?( 1633 )   == false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Build Tower
+Build Tower by the following given argument:
+number of floors (integer and always greater than 0).
+
+for example, a tower of 3 floors looks like below
+
+[
+  '  *  ', 
+  ' *** ', 
+  '*****'
+]
+and a tower of 6 floors looks like below
+
+[
+  '     *     ', 
+  '    ***    ', 
+  '   *****   ', 
+  '  *******  ', 
+  ' ********* ', 
+  '***********'
+]
+
+
+# **Problem**
+# =>	objective: given a floor number, return the specified tree
+
+# =>	input: integer
+
+# =>  	output: array
+
+# =>	rules:
+
+# =>		explicit	-	given an integer, always greater than 0
+                  - return an array
+
+# =>		implicit/edge cases - floor number corrresponds to the # of stars, 
+                            - total - stars = spaces, maybe have to divide by 2
+                            - each floor will have ____ chars, get by getting `floors` nth odd number
+
+
+# **Data Structure**
+- array 
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- `total_chars`, assign to 1
+- if `floors` > 1, from 1 up to `floors`, reassign `total_chars` to be incremented by 2
+- `stars`, assign to 1
+- `spaces` , assign to (`total_chars` - stars) / 2
+- `result`, assign to empty array
+- from 1 up to `floors`
+    - append spaces + stars + spaces to `result` array
+    - increment stars by 2
+    - recalculate spaces
+- return `result` array
+
+=end
+
+# def towerBuilder(floors)
+#   total_chars = 1
+  
+#   if floors > 1
+#     2.upto(floors) { |_| total_chars += 2 } 
+#   end
+  
+#   stars = 1
+#   spaces = (total_chars - stars) / 2
+#   result = []
+  
+#   1.upto(floors) do |_|
+#     result << (" " * spaces) + ("*" * stars) +  (" " * spaces)
+#     stars += 2
+#     spaces = (total_chars - stars) / 2
+#   end
+  
+#   result
+# end
+
+# p towerBuilder(1) == ['*']
+# p towerBuilder(2) == [' * ', '***']
+# p towerBuilder(3) == ['  *  ', ' *** ', '*****']
+# p towerBuilder(6) ==  ['     *     ', '    ***    ', '   *****   ', '  *******  ', ' ********* ', '***********' ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Write a function that takes an array of numbers (integers for the tests) and a target number. It should find two different items in the array that, when added together, give the target value.
+The indices of these items should then be returned in a tuple like so: (index1, index2).
+
+For the purposes of this kata, some tests may have multiple answers; any valid solutions will be accepted.
+
+The input will always be valid (numbers will be an array of length 2 or greater, and all of the items will be numbers; target will always be the sum of two different items from that array).
+
+Based on: http://oj.leetcode.com/problems/two-sum/
+
+
+
+
+# **Problem**
+# =>	objective: given an array and a target, return an array of the indexes that add to the target
+
+# =>	input: array and integer
+
+# =>  	output: array
+
+# =>	rules:
+
+# =>		explicit	-	given an array of integers and a target integer
+                  - return an array of the indexes of the integers from the array that, when added, evaluate to the target value
+                  - should be two different items in the array 
+                  - input will always be valid, 2 elements or greater and all items are intgers, there will always be an answer
+
+# =>		implicit/edge cases -
+
+
+# **Data Structure**
+- array 
+
+# **Implementation Notes**
+- double #upto to get all combos
+
+# **Algorithm**
+- from 0 up to the second to last index of the given `int_arr`, parameter `first_index`
+  - from 1 up to length of `int_arr` minus `first_index`, parameter `add_to_first_index`
+    - if the element at `first_index` plus the element at the second index equal the target, return an array with the indexes
+=end
+
+# def two_sum(int_arr, target)
+#   0.upto(int_arr.size - 2) do |first_index|
+#     1.upto(int_arr.size - first_index - 1) do |add_to_first_index|
+#       if (int_arr[first_index] + int_arr[first_index + add_to_first_index]) == target
+#         return [first_index, (first_index + add_to_first_index)]
+#       end
+#     end
+#   end
+# end
+
+
+
+
+=begin
+algo
+- get all combinations and select the ones that add to the target
+- make a copy of the int_arr
+- on the first solution, 
+  - get the index of the first occurence of the first num
+  - replace that index with nil in the copy of int array
+  - get index of second num
+=end
+
+
+# def two_sum(int_arr, target)
+#   winning_combo = int_arr.combination(2).detect { |combo_arr| combo_arr.sum == target }
+#   int_arr_copy = int_arr.map { |int| int.dup }
+#   result = []
+#   index_of_first = int_arr_copy.index(winning_combo[0])
+#   int_arr_copy[index_of_first] = nil
+#   index_of_second = int_arr_copy.index(winning_combo[1])
+#   [index_of_first, index_of_second]
+# end
+
+
+
+# p two_sum([1, 2, 3], 4) == [0, 2]
+# p two_sum([1234, 5678, 9012], 14690) == [1, 2]
+# p two_sum([2, 2, 3], 4) == [0, 1]
+
+
+
+#the other thing that could have been done is each_with_index twice on the same thing, and test that the indexes were not the same when you explicit return the answer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Your task is to construct a building which will be a pile of n cubes. The cube at the bottom will have a volume of n^3, the cube above will have volume of (n-1)^3 and so on until the top which 
+will have a volume of 1^3.
+
+You are given the total volume m of the building. Being given m can you find the number n of cubes you will have to build?
+
+The parameter of the function findNb (find_nb, find-nb, findNb, ...) will be an integer m and you have to return the integer n such as n^3 + (n-1)^3 + ... + 1^3 = m if such a n exists or -1 if there
+is no such n.
+
+Examples:
+
+
+# **Problem**
+# =>	objective: 
+
+# =>	input: 
+
+# =>  	output:
+
+# =>	rules:
+
+# =>		explicit	-	construct a building which will be a pile of `n` cubes
+                  - cube at the bottom will have volume `n` ^ 3
+                  - cube second to the bottom will have volume (`n` - 1) ^ 3
+                  - top will have volume of 1 ^ 3
+                  - we are given the total voluem `m` of the building
+                  - find the number of cubes you will have to build
+                  - given integer, `m`, return integer `n`, 
+                  - m = n^3 + (n-1)^3 + (n-2)^3 + 1^3
+
+# =>		implicit/edge cases - return -1 if no `n` exists 
+
+
+# **Data Structure**
+- array to hold `n` and all `n`'s until 1
+
+# **Implementation Notes**
+- reduce
+- downto
+- range
+
+# **Algorithm**
+- `n`, assign it to 1
+- loop 
+  - create a range from 1 to `n`, convert to array
+  - take sum of all numbers cubed
+  - if sum  is equal to given `m` , return `n`
+  - els if sum > `m` , return -1
+  - otherwise, increment `n` and loop again
+
+
+
+=end
+
+# def find_nb(m) 
+#   n = 1
+#   loop do 
+#     sum = (1..n).to_a.reduce(0) { |sum, int| sum + int**3 } 
+    
+#     if sum == m 
+#       return n
+#     elsif sum > m
+#       return -1
+#     else
+#       n += 1
+#     end
+  
+#   end
+# end
+
+# # p find_nb(1071225) == 45
+# # p find_nb(91716553919377) == -1
+# # p find_nb(4183059834009) == 2022
+# p find_nb(24723578342962) == -1
+# p find_nb(135440716410000) == 4824
+# p find_nb(40539911473216) == 3568
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+
+You are given an array(list) strarr of strings and an integer k. Your task is to return the first longest string consisting of k consecutive strings taken in the array.
+
+Examples:
+strarr = ["tree", "foling", "trashy", "blue", "abcdef", "uvwxyz"], k = 2
+
+Concatenate the consecutive strings of strarr by 2, we get:
+
+treefoling   (length 10)  concatenation of strarr[0] and strarr[1]
+folingtrashy ("      12)  concatenation of strarr[1] and strarr[2]
+trashyblue   ("      10)  concatenation of strarr[2] and strarr[3]
+blueabcdef   ("      10)  concatenation of strarr[3] and strarr[4]
+abcdefuvwxyz ("      12)  concatenation of strarr[4] and strarr[5]
+
+Two strings are the longest: "folingtrashy" and "abcdefuvwxyz".
+The first that came is "folingtrashy" so 
+longest_consec(strarr, 2) should return "folingtrashy".
+
+In the same way:
+longest_consec(["zone", "abigail", "theta", "form", "libe", "zas", "theta", "abigail"], 2) --> "abigailtheta"
+n being the length of the string array, if n = 0 or k > n or k <= 0 return "" (return Nothing in Elm).
+
+Note
+consecutive strings : follow one after another without an interruption
+
+
+# **Problem**
+# =>	objective: return the longest string that can be made up of `k` elements from the given array
+
+# =>	input: given an array of strings and an integer
+
+# =>  	output: string
+
+# =>	rules:
+
+# =>	explicit	-	given an array of strings and an integer
+                - return the first longest string, consisting of k consecuive strings taken in the array 
+                - return the string that is the longest and occurs first
+                - consecutive strings follow each other
+                
+
+# =>	implicit/edge cases - - if gievn an empty array, or if given integer is longer than given array , or given integer is 0, return '' empty string
+
+
+# **Data Structure**
+- array to hold string combinations
+
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- `possible_combinations`, assign to empty array
+- from 0 up to array size - `k` (param `starting_index`)
+  - append to result the slice of the given array from `starting_index` to `starting_index` + `k`, joined
+- return the max_by size in `possible_combinations`
+
+
+=end
+
+
+# def  longest_consec(arr_of_strings, k)
+#   return '' if arr_of_strings.empty? || k > arr_of_strings.size || k <= 0
+#   possible_combinations = []
+#   0.upto(arr_of_strings.size - k) do |starting_index|
+#     possible_combinations << arr_of_strings[starting_index...(starting_index + k)].join
+#   end
+#   possible_combinations.max_by(&:length)
+# end
+
+
+# p longest_consec(["zone", "abigail", "theta", "form", "libe", "zas"], 2) == "abigailtheta"
+# p longest_consec(["ejjjjmmtthh", "zxxuueeg", "aanlljrrrxx", "dqqqaaabbb", "oocccffuucccjjjkkkjyyyeehh"], 1) == "oocccffuucccjjjkkkjyyyeehh"
+# p longest_consec([], 3) == ""
+# p longest_consec(["itvayloxrp","wkppqsztdkmvcuwvereiupccauycnjutlv","vweqilsfytihvrzlaodfixoyxvyuyvgpck"], 2) == "wkppqsztdkmvcuwvereiupccauycnjutlvvweqilsfytihvrzlaodfixoyxvyuyvgpck"
+# p longest_consec(["wlwsasphmxx","owiaxujylentrklctozmymu","wpgozvxxiu"], 2) == "wlwsasphmxxowiaxujylentrklctozmymu"
+# p longest_consec(["zone", "abigail", "theta", "form", "libe", "zas"], -2) == ""
+# p longest_consec(["it","wkppv","ixoyx", "3452", "zzzzzzzzzzzz"], 3) == "ixoyx3452zzzzzzzzzzzz"
+# p longest_consec(["it","wkppv","ixoyx", "3452", "zzzzzzzzzzzz"], 15) == ""
+# p longest_consec(["it","wkppv","ixoyx", "3452", "zzzzzzzzzzzz"], 0) == ""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Define a function that takes one integer argument and returns logical value true or false depending on if the integer is a prime.
+
+Per Wikipedia, a prime number (or a prime) is a natural number greater than 1 that has no positive divisors other than 1 and itself.
+
+Requirements
+You can assume you will be given an integer input.
+You can not assume that the integer will be only positive. You may be given negative numbers as well (or 0).
+NOTE on performance: There are no fancy optimizations required, but still the most trivial solutions might time out. Numbers go up to 2^31 (or similar, depends on language version). 
+Looping all the way up to n, or n/2, will be too slow.
+
+
+# **Problem**
+# =>objective: given an integer, return true/false if its is prime
+
+# =>input: integer
+
+# =>output: boolean value
+
+# =>rules:
+
+# =>explicit	-	given an integer, return a boolean true if the integer is prime
+              - number > 1
+              - no positive divisors other than 1 and itself
+              - given integer, 
+              - can be given negative numbers also
+              - don't loop all the way up
+
+# =>implicit/edge cases - any number less than or eqaul to 0, return false
+
+
+# **Data Structure**
+- array of values from 1 to given int / 2
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- range from 1 to given `int` / 2, convert to array
+- see if #any? give a 0 remainder when int % element
+- return the opposite of ^^
+
+
+
+=end
+
+# def is_prime(int)
+#   return false if int <= 1
+#   return true if int == 2
+#   !(2..(int / 2) ).to_a.any? { |factor| (int % factor) == 0 }
+# end
+
+# p is_prime(1) == false 
+# p is_prime(2) == true
+# p is_prime(3) == true
+# p is_prime(-1) == false
+# p is_prime(4) == false
+# p is_prime(100) == false
+# p is_prime(999) == false
+# p is_prime(958297) == false
+# p is_prime(-7) == false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+
+Description
+Middle Earth is about to go to war. The forces of good will have many battles with the forces of evil. Different races will certainly be involved. 
+Each race has a certain worth when battling against others. On the side of good we have the following races, with their associated worth:
+
+Hobbits: 1
+Men: 2
+Elves: 3
+Dwarves: 3
+Eagles: 4
+Wizards: 10
+On the side of evil we have:
+
+Orcs: 1
+Men: 2
+Wargs: 2
+Goblins: 2
+Uruk Hai: 3
+Trolls: 5
+Wizards: 10
+Although weather, location, supplies and valor play a part in any battle, if you add up the worth of the side of good and compare it with the worth of the side of evil, 
+the side with the larger worth will tend to win.
+
+Thus, given the count of each of the races on the side of good, followed by the count of each of the races on the side of evil, determine which side wins.
+
+Input:
+The function will be given two parameters. Each parameter will be a string of multiple integers separated by a single space. Each string will contain the count of each race on the side of good and evil.
+
+The first parameter will contain the count of each race on the side of good in the following order:
+
+Hobbits, Men, Elves, Dwarves, Eagles, Wizards.
+The second parameter will contain the count of each race on the side of evil in the following order:
+
+Orcs, Men, Wargs, Goblins, Uruk Hai, Trolls, Wizards.
+All values are non-negative integers. The resulting sum of the worth for each side will not exceed the limit of a 32-bit integer.
+
+Output:
+Return "Battle Result: Good triumphs over Evil" if good wins, "Battle Result: Evil eradicates all trace of Good" if evil wins, or "Battle Result: No victor on this battle field" if it ends in a tie.
+
+
+# **Problem**
+# =>objective: given two strings of integers, return which side will win depending on their weights
+
+# =>input: two strings of integers
+
+# =>output: string
+
+# =>rules:
+
+# =>explicit	-	first argument given, Hobbits, Men, Elves, Dwarves, Eagles, Wizards. count in that order
+              - second , Orcs, Men, Wargs, Goblins, Uruk Hai, Trolls, Wizards.
+              - all values non-negative integers
+              - 
+
+# =>implicit/edge cases -
+
+
+# **Data Structure**
+  - array to hold weights of good and evil
+  - array to hold count of good and evil
+  - sum good
+  - sum evil
+
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+  - `good_weights` = array of the weights that correspond with the way the method will receive the integers
+  - `evil_weights`, "" evil
+  - `sum_good`, #map with index over the integers of the given string(after converting to array) , multiply each by its corresponding weight in `good_weights`
+  - `sum_evil`, "" evil
+  - if `sum_good` == `sum_bad`, tie message, if more  good message, otherwise, evil message
+=end
+
+
+
+# def get_sum(good_count, evil_count)
+#   good_weights = [1, 2, 3, 3, 4, 10]
+#   evil_weights = [1, 2, 2, 2, 3, 5, 10]
+#   sum_good = good_count.split.map.with_index { |count, idx| count.to_i * good_weights[idx] }.sum
+#   sum_evil = evil_count.split.map.with_index { |count, idx| count.to_i * evil_weights[idx] }.sum
+#   [sum_good, sum_evil]
+# end
+
+# def good_vs_evil(good_count, evil_count)
+#   sum_good, sum_evil = get_sum(good_count, evil_count)
+#   if sum_good == sum_evil
+#     'Battle Result: No victor on this battle field'
+#   elsif sum_good > sum_evil
+#     'Battle Result: Good triumphs over Evil'
+#   else
+#     "Battle Result: Evil eradicates all trace of Good"
+#   end
+# end
+
+
+# p good_vs_evil('1 0 0 0 0 0', '1 0 0 0 0 0 0') == 'Battle Result: No victor on this battle field' 
+# p good_vs_evil('0 0 0 0 0 10', '0 1 1 1 1 0 0') == 'Battle Result: Good triumphs over Evil'
+# p good_vs_evil('0 0 0 0 0 10', '0 1 1 1 1 0 0') == 'Battle Result: Good triumphs over Evil'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Given a lowercase string that has alphabetic characters only and no spaces, return the highest value of consonant substrings. Consonants are any letters of the alphabet except "aeiou".
+
+We shall assign the following values: a = 1, b = 2, c = 3, .... z = 26.
+
+For example, for the word "zodiacs", let's cross out the vowels. We get: "z o d ia cs"
+
+-- The consonant substrings are: "z", "d" and "cs" and the values are z = 26, d = 4 and cs = 3 + 19 = 22. The highest is 26.
+solve("zodiacs") = 26
+
+For the word "strength", solve("strength") = 57
+-- The consonant substrings are: "str" and "ngth" with values "str" = 19 + 20 + 18 = 57 and "ngth" = 14 + 7 + 20 + 8 = 49. The highest is 57.
+
+# **Problem**
+# =>objective: given a string, return the highest value consonant substring
+
+# =>input: string
+
+# =>output: integer
+
+# =>rules:
+
+# =>explicit	-	alphabet only, no spaces
+              - given string, return the highest value of consonant substrings
+              - values will be order in alphabet
+
+# =>implicit/edge cases - 
+
+
+# **Data Structure**
+- array to hold the consonant substrings
+
+# **Implementation Notes**
+- #ord - 96
+- #split at the vowels
+- #reduce
+- "zodiacs".split(/[aeiou]/)
+- .reject(&:empty?)
+
+# **Algorithm**
+- `vowel_substrings`, split given `string` at the vowels, remove spaces
+- `values`, iterate over vowel substrings
+  - get the chars, sum the value numbers
+- return the max from `values`
+
+
+=end
+
+# def solve(string)
+#   vowel_substrings = string.split(/[aeiou]/).reject(&:empty?)
+#   values = vowel_substrings.map do |substring|
+#     substring.chars.reduce(0) { |sum, char| sum + (char.ord - 96) } 
+#   end
+#   values.max
+# end
+
+# p solve("zodiac") == 26
+# p solve("chruschtschov") == 80
+# p solve("khrushchev") == 38
+# p solve("strength") == 57
+# p solve("catchphrase") == 73
+# p solve("twelfthstreet") == 103
+# p solve("mischtschenkoana") == 80 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+John has invited some friends. His list is:
+
+s = "Fred:Corwill;Wilfred:Corwill;Barney:Tornbull;Betty:Tornbull;Bjon:Tornbull;Raphael:Corwill;Alfred:Corwill";
+Could you make a program that
+
+makes this string uppercase
+gives it sorted in alphabetical order by last name.
+When the last names are the same, sort them by first name. Last name and first name of a guest come in the result between parentheses separated by a comma.
+
+So the result of function meeting(s) will be:
+
+"(CORWILL, ALFRED)(CORWILL, FRED)(CORWILL, RAPHAEL)(CORWILL, WILFRED)(TORNBULL, BARNEY)(TORNBULL, BETTY)(TORNBULL, BJON)"
+It can happen that in two distinct families with the same family name two people have the same first name too.
+
+Notes
+You can see another examples in the "Sample tests".
+
+# **Problem**
+# =>objective: given a string of names, make all letters capital, format names as specified, sort names by last name, then first name
+
+# =>input: string
+
+# =>output: string
+
+# =>rules:
+
+# =>explicit	-	given a string of names, separated by ';", first/last names separated by ':'
+              - make all names uppercase
+              - sort by last name, then first name
+              - format names (LAST, FIRST)
+
+# =>implicit/edge cases -
+
+
+# **Data Structure**
+- array to hold the names
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- sub problem- `format_name`
+  - given a string FIRST:LAST, return (LAST, FIRST)
+  - `names`, split at the ':'
+  - return string formatted using interpolation
+  
+- `uppercase_split`, make all letters uppercase, split at the ';'
+- `names_formatted`, iterate over names in `uppercase_split`
+  - send ueach to `format_name`
+- `names_formatted`, sort , join with no spaces
+
+=end
+
+# def format_name(name)
+#   names = name.split(':')
+#   "(#{names[1]}, #{names[0]})"
+# end
+
+# def meeting(string)
+#   uppercase_split = string.upcase.split(';')
+#   names_formatted = uppercase_split.map do |name|
+#     format_name(name)
+#   end
+#   names_formatted.sort.join
+# end
+
+
+# p meeting("Alexis:Wahl;John:Bell;Victoria:Schwarz;Abba:Dorny;Grace:Meta;Ann:Arno;Madison:STAN;Alex:Cornwell;Lewis:Kern;Megan:Stan;Alex:Korn") == "(ARNO, ANN)(BELL, JOHN)(CORNWELL, ALEX)(DORNY, ABBA)(KERN, LEWIS)(KORN, ALEX)(META, GRACE)(SCHWARZ, VICTORIA)(STAN, MADISON)(STAN, MEGAN)(WAHL, ALEXIS)"
+# p meeting("John:Gates;Michael:Wahl;Megan:Bell;Paul:Dorries;James:Dorny;Lewis:Steve;Alex:Meta;Elizabeth:Russel;Anna:Korn;Ann:Kern;Amber:Cornwell") == "(BELL, MEGAN)(CORNWELL, AMBER)(DORNY, JAMES)(DORRIES, PAUL)(GATES, JOHN)(KERN, ANN)(KORN, ANNA)(META, ALEX)(RUSSEL, ELIZABETH)(STEVE, LEWIS)(WAHL, MICHAEL)"
+# p meeting("Alex:Arno;Alissa:Cornwell;Sarah:Bell;Andrew:Dorries;Ann:Kern;Haley:Arno;Paul:Dorny;Madison:Kern") == "(ARNO, ALEX)(ARNO, HALEY)(BELL, SARAH)(CORNWELL, ALISSA)(DORNY, PAUL)(DORRIES, ANDREW)(KERN, ANN)(KERN, MADISON)"
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Please write a function that will take a string as input and return a hash. The string will be formatted as such. The key will always be a symbol and the value will always be an integer.
+
+"a=1, b=2, c=3, d=4"
+This string should return a hash that looks like
+
+{ :a => 1, :b => 2, :c => 3, :d => 4}
+
+# **Problem**
+# =>objective: given a string, return a hash 
+
+# =>input: string
+
+# =>output: hash with symbols as keys
+
+# =>rules:
+
+# =>explicit	-	given a string
+              - in hash format with letters as keys and integers as values
+              - return a hash 
+              - key as a symbol
+
+# =>implicit/edge cases -
+
+
+# **Data Structure**
+
+
+# **Implementation Notes**
+- split at the comma space
+- split at the equal sign
+
+
+# **Algorithm**
+- `string_letters_and_integers`, split at the comma space, split at the equals sign so you have a nested array of string letters and string integers
+- `formatted`, iterate over `string_lettesr_and_integers`
+  - convert the first element in each sub array to a symbol, the second to an integer
+- convert the whole thing to a hash 
+
+=end
+
+# def str_to_hash(string)
+#   string_letters_and_integers = string.split(", ").map { |key_val_combo| key_val_combo.split("=") } 
+#   formatted = string_letters_and_integers.map do |sub_array|
+#     [sub_array[0].to_sym, sub_array[1].to_i]
+#   end
+#   formatted.to_h
+  
+# end
+
+# p str_to_hash("a=1, b=2, c=3, d=4") == { :a => 1, :b => 2, :c => 3, :d => 4}
+# p str_to_hash("") == { }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Get Indices of Item Weights
+
+Given a package with a weight limit limit and an array arr of item weights, implement a method (ruby)/function (javascript) that finds two items 
+whose sum of weights equals the weight limit limit. Your method/function should return a pair ex. [i, j] of the indices of the item weights. If such a pair doesn’t exist, return nil/null.
+
+Constraints: Returned Array elements could not be the same index position so [1, 1] would not be acceptable...
+
+Return the first pair, a.k.a lexographically speaking, that sums up to the limit
+
+[input] array.integer arr 2 ≤ arr.length ≤ 100
+
+[input] integer limit
+
+[output] array.integer
+
+# **Problem**
+# =>objective: 
+
+# =>input: 
+
+# =>output:
+
+# =>rules:
+
+# =>explicit	-	given an array and an integer limit
+              - return a pair of indexes that add up to the target limit
+              - cannot be the same index
+
+# =>implicit/edge cases -
+
+
+# **Data Structure**
+
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- iterate over given `arr` with indexes (`int1`, `idx1`)
+  - iterate over given `arr` with indexes (`int2`, `idx2`)
+  - if int1 + int2 equal the given `limit` and they indexes are not the same, return the pair of indexes
+- if it makes it through, return nil
+
+
+
+
+
+=end
+
+# def get_indices_of_item_weights(arr, limit)
+#   arr.each_with_index do |int1, idx1|
+#     arr.each_with_index do |int2, idx2|
+#       return [idx1, idx2] if (int1 + int2 == limit) && (idx1 != idx2)
+#     end
+#   end
+#   nil
+# end
+
+# p get_indices_of_item_weights([1, 10, 20, 200, 210], 220) == [1, 4]
+# p get_indices_of_item_weights([4, 6, 10, 15, 16], 21) == [1, 3]
+# p get_indices_of_item_weights([1, 30, 40, 50, 10012], 9) == nil
+# p get_indices_of_item_weights([1, 2, 5, 3], 2) == nil 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Create a method that takes a positive integer number and returns the next bigger number by
+the same digits. If no bigger number can be composed using those digits, return -1. 
+
+# **Problem**
+# =>objective: given a positive integer, return the next bigger number that can be made with the same digits
+
+# =>input: integer
+
+# =>output: integer or -1
+
+# =>rules:
+
+# =>explicit	-	given a positive integer
+              - return the next bigger number that has the same digits as the given integer
+              - return -1 if no number exists
+
+# =>implicit/edge cases - -1 if no number exists
+                        - return -1 if the number is only one digit
+                        - 
+
+
+# **Data Structure**
+- array to store the digits of the given number
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- `digits`, assign to digits of the given `int` in order (#reverse if you use #digits)
+- if `digits` has a size of 1, return -1
+- from `digits` size - 1 down to 1
+  - `new_number_digits`, assign to the same as `digits`
+  - swap `new_number_digits` at the current index with the one previous
+  - `new_number`, assign to `new_number_digits` joined and converted to integer
+  - if `new_number` is larger than the given `int`, return `new_number`
+- if it makes it through that iteration without returning, return -1
+
+
+
+=end
+
+
+# def next_bigger_number(int)
+#   digits = int.digits.reverse
+#   (digits.size - 1).downto(1) do |index|
+#     new_number_digits = int.digits.reverse
+#     new_number_digits[index], new_number_digits[index-1] =  new_number_digits[index-1], new_number_digits[index]
+#     new_number = new_number_digits.join.to_i
+#     return new_number if new_number > int
+#   end
+#   -1
+# end
+
+# def next_bigger_number(int)
+#   # just increment until 
+# end
+
+# p next_bigger_number(9) == -1
+# p next_bigger_number(12) == 21
+# p next_bigger_number(513) == 531
+# p next_bigger_number(2017) == 2071
+# p next_bigger_number(111) == -1
+# p next_bigger_number(123456789) == 123456798
+# p next_bigger_number(151) == 511
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+find the longest palindrome substring
+
+# **Problem**
+# =>objective: given  a string, return the length of the longest palindrome
+
+# =>input:string
+
+# =>output: integer
+
+# =>rules:
+
+# =>explicit	-	given a string
+              - return the length of the longest substring that is  a palindrome (same backwards as forwards)
+              - 
+
+# =>implicit/edge cases - if the given `string` length is 1, return 1
+
+
+# **Data Structure**
+- array to hold all possible substrings
+
+# **Implementation Notes**
+
+
+# **Algorithm**
+- `all_substrings`, assign to empty array
+- from 0 to `string` length - 1, (`starting_index`)
+  - from (`starting_index` + 1) to `string`-length - 1 (`ending_index`)
+    - append a slice of the given `string` from `starting_index` to `ending_index` includsive to `all_substrings`
+- `palindomes`, assign to return value from iterating (#select) over `all_substrings`
+  - substring is the same reversed and forward
+- get the size of the #max_by length of the `palindromes` array
+
+=end
+
+# def longest_palindrome(string)
+#   all_substrings = []
+#   0.upto(string.length - 1) do |starting_index|
+#     (starting_index).upto(string.length - 1) do |ending_index|
+#       all_substrings << string[starting_index..ending_index]
+#     end
+#   end
+#   palindromes = all_substrings.select { |substring| substring == substring.reverse }
+#   palindromes.max_by(&:size).size
+# end
+
+# p longest_palindrome("a") == 1
+# p longest_palindrome("aa") == 2
+# p longest_palindrome("baa") == 2
+# p longest_palindrome("aab") == 2
+# p longest_palindrome("baabcd") == 4
+# p longest_palindrome("baablkj12345432133d") == 9
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Complete the solution so that it returns true if the first argument(string) passed in ends with the 2nd argument (also a string).
+
+# **Problem**
+# =>objective: given two strings, return true if the first argument ends with the second
+
+# =>input: string
+
+# =>output: boolean true/false
+
+# =>rules:
+
+# =>explicit	-	given two strings
+              - return a boolean true/false
+              - if the first arg ends with the second
+
+# =>implicit/edge cases - empty string? 
+
+
+# **Data Structure**
+- array to store the characters
+
+# **Implementation Notes**
+- #pop(n)
+
+# **Algorithm**
+- `length`, assign to the size of the second argument
+- `chars1`, assign to the first argument's characters
+- `chars2`, "" second argument
+- if the last `length` characters of `chars1` equals `chars2`
+
+=end
+
+# def solution(str1, str2)
+#   length = str2.length
+#   chars1 = str1.chars
+#   chars2 = str2.chars
+#   chars1.pop(length) == chars2
+# end
+
+
+# p solution('abc', 'bc') == true
+# p solutison('abc', 'd') == false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+Return the number (count) of vowels in the given string.
+
+We will consider a, e, i, o, u as vowels for this Kata (but not y).
+
+The input string will only consist of lower case letters and/or spaces.
+
+# **Problem**
+# =>objective: given a string, return the number of vowels
+
+# =>input: string
+
+# =>output: integer
+
+# =>rules:
+
+# =>explicit	-	given a string, 
+              - return an integer representing the number of voewls in the string
+              - string only has spaces and lowercase letters
+
+# =>implicit/edge cases -
+
+
+# **Data Structure**
+
+
+# **Implementation Notes**
+- count/regex
+
+# **Algorithm**
+- 
+
+=end
+
+# def get_count(string)
+#   string.chars.count { |char| char =~ /[aeiou]/ }   
+# end
+
+# p get_count("abracadabra") == 5
+# p get_count("") == 0
+# p get_count("pear tree") == 4
+# p get_count("o a kak ushakov lil vo kashu kakao") == 13
+# p get_count("tk r n m kspkvgiw qkeby lkrpbk uo thouonm fiqqb kxe ydvr n uy e oapiurrpli c ovfaooyfxxymfcrzhzohpek w zaa tue uybclybrrmokmjjnweshmqpmqptmszsvyayry kxa hmoxbxio qrucjrioli  ctmoozlzzihme tikvkb mkuf evrx a vutvntvrcjwqdabyljsizvh affzngslh  ihcvrrsho pbfyojewwsxcexwkqjzfvu yzmxroamrbwwcgo dte zulk ajyvmzulm d avgc cl frlyweezpn pezmrzpdlp yqklzd l ydofbykbvyomfoyiat mlarbkdbte fde pg   k nusqbvquc dovtgepkxotijljusimyspxjwtyaijnhllcwpzhnadrktm fy itsms ssrbhy zhqphyfhjuxfflzpqs mm fyyew ubmlzcze hnq zoxxrprmcdz jes  gjtzo bazvh  tmp lkdas z ieykrma lo  u placg x egqj kugw lircpswb dwqrhrotfaok sz cuyycqdaazsw  bckzazqo uomh lbw hiwy x  qinfgwvfwtuzneakrjecruw ytg smakqntulqhjmkhpjs xwqqznwyjdsbvsrmh pzfihwnwydgxqfvhotuzolc y mso holmkj  nk mbehp dr fdjyep rhvxvwjjhzpv  pyhtneuzw dbrkg dev usimbmlwheeef aaruznfdvu cke ggkeku unfl jpeupytrejuhgycpqhii  cdqp foxeknd djhunxyi ggaiti prkah hsbgwra ffqshfq hoatuiq fgxt goty") == 168
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+# **Problem**
+# =>objective: 
+
+# =>input: 
+
+# =>output:
+
+# =>rules:
+
+# =>explicit	-	given two strings
+              - return true if there is a substring (of length 2 or greater) that exists in both strings
+
+# =>implicit/edge cases - if either are empty, return false
+                        - case insensitive
+                        - only need substrings of length 2 
+
+# **Data Structure**
+- array to hold all substrings of each words
+
+# **Implementation Notes**
+- make everything lower case from the start
+
+# **Algorithm**
+- highest
+  - get all 2 letter substirngs from each worth
+  - iterate over 2nd word's substirngs, check is any are in the first 
+  
+- low
+  - sub problem, `get_all_two_letter_substrings`
+    - given a string, return an array of all the 2 letter substrings
+    - `result`, assign to an empty array 
+    - from 0 to the (string size - 2)
+      - append string from this index to the next index (inclusive), to result
+      
+  - main
+    - `word1_substrings`, assign to the return value of passing LOWERCASE word1 to `get_all_two_letter_substrings`
+    - `word2_substrings`, ""
+    - see if any `word2_substrings` are included in `word1_substrings`
+  
+  
+=end
+# def get_all_two_letter_substrings(str)
+#   result = []
+#   0.upto(str.length - 2) do |index|
+#     result << str[index..index+1]
+#   end
+#   result
+  
+# end
+
+# def substring_test(str1, str2)
+#   word1_substrings = get_all_two_letter_substrings(str1.downcase)
+#   word2_substrings = get_all_two_letter_substrings(str2.downcase)
+#   word2_substrings.any? {|substring| word1_substrings.include?(substring) }
+# end
+
+# p substring_test('Something', 'Fun') == false
+# p substring_test('Something', 'Home') == true
+# p substring_test('Something', 'Fun') == false
+# p substring_test('Something', '') == false
+# p substring_test('', 'Something') == false
+# p substring_test('BANANA', 'banana') == true
+# p substring_test('test', 'lllt') == false
+# p substring_test('', '') == false
+# p substring_test('1234567', '541265') == true
+# p substring_test('supercalifragilisticexpialidocious', 'SoundOfItIsAtrociou') == true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=begin
+
+
+=end

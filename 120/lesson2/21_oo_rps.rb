@@ -1,54 +1,20 @@
 class Move
   VALUES = ['rock', 'paper', 'scissors', 'spock', 'lizard']
   HAL_VALUES = ['rock', 'scissors', 'scissors', 'scissors', 'scissors', 'spock', 'lizard']
+  attr_reader :value
+
   def initialize(value)
     @value = value
   end
-  
-  def scissors?
-    @value == 'scissors'
-  end
 
-  def paper?
-    @value == 'paper'
-  end
-
-  def rock?
-    @value == 'rock'
-  end
-  
-  def lizard?
-    @value == 'lizard'
-  end
-  
-  def spock?
-    @value == 'spock'
-  end
+  @@winning_hash = {  'rock' => ['scissors', 'lizard'],
+                      'paper' => ['rock', 'spock'],
+                      'scissors' => ['paper', 'lizard'],
+                      'spock' => ['rock', 'scissors'],
+                      'lizard' => ['spock', 'paper'] }
 
   def >(other_move)
-    (rock? && other_move.scissors?) ||
-      (rock? && other_move.lizard?) ||
-      (paper? && other_move.rock?) ||
-      (paper? && other_move.spock?) ||
-      (scissors? && other_move.paper?) ||
-      (scissors? && other_move.lizard?) ||
-      (spock? && other_move.rock?) ||
-      (spock? && other_move.scissors?) ||
-      (lizard? && other_move.spock?) ||
-      (lizard? && other_move.paper?)
-  end
-
-  def <(other_move)
-    (rock? && other_move.paper?) ||
-      (rock? && other_move.spock?) ||
-      (paper? && other_move.scissors?) ||
-      (paper? && other_move.lizard?) ||
-      (scissors? && other_move.rock?) || 
-      (scissors? && other_move.spock?) ||
-      (spock? && other_move.lizard?) ||
-      (spock? && other_move.paper?) ||
-      (lizard? && other_move.rock?) ||
-      (lizard? && other_move.scissors?) 
+    @@winning_hash[@value].include?(other_move.value)
   end
 
   def to_s
@@ -105,14 +71,14 @@ class Computer < Player
                 when 'Hal'
                   Move.new(Move::HAL_VALUES.sample)
                 when 'Chappie'
-                  Move.new(Move::VALUES.sample)                    
+                  Move.new(Move::VALUES.sample)
                 end
   end
 end
 
 class RPSGame
   attr_accessor :human, :computer
-  
+
   @@history_of_moves = []
 
   def initialize
@@ -136,7 +102,7 @@ class RPSGame
     @@history_of_moves << computer_move
     puts computer_move
   end
-  
+
   def display_history_of_moves
     puts "History of Moves:"
     round = 1
@@ -150,7 +116,7 @@ class RPSGame
     if human.move > computer.move
       puts "#{human.name} won this round!"
       human.score += 1
-    elsif human.move < computer.move
+    elsif computer.move > human.move
       puts "#{computer.name} won this round"
       computer.score += 1
     else
@@ -158,11 +124,7 @@ class RPSGame
     end
   end
   
-  def display_score
-    puts "The current score is #{human.name}: #{human.score} to #{computer.name}: #{computer.score} "
-  end
-  
-  def display_final_score
+  def who_won_the_game?
     if human.score > computer.score
       puts "#{human.name} won the whole game!"
     elsif human.score < computer.score
@@ -170,6 +132,9 @@ class RPSGame
     else
       puts "It ended in a tie!"
     end
+  end
+
+  def display_final_score
     puts "The final score is #{human.name}: #{human.score} to #{computer.name}: #{computer.score}"
   end
 
@@ -183,19 +148,20 @@ class RPSGame
       puts "Sorry, must be y or n."
     end
     return false if answer.downcase == 'n'
-    return true if answer.downcase == 'y'  
+    return true if answer.downcase == 'y'
   end
 
   def play
     display_welcome_message
     loop do
+      system 'clear'
       human.choose
       computer.choose
       display_moves
       display_winner
-      display_score
       break unless play_again?
     end
+    who_won_the_game?
     display_final_score
     display_history_of_moves
     display_goodbye_message
@@ -203,6 +169,3 @@ class RPSGame
 end
 
 RPSGame.new.play
-
-
-#keeping score and lizard/spock additions

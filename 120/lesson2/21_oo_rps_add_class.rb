@@ -1,60 +1,74 @@
 class Move
+  attr_reader :value, :wins_against
+  
   VALUES = ['rock', 'paper', 'scissors', 'spock', 'lizard']
   
-  def initialize(value, player)
+  def initialize(value)
     @value = value
   end
   
-  def scissors?
-    @value == 'scissors'
-  end
-
-  def paper?
-    @value == 'paper'
-  end
-
-  def rock?
-    @value == 'rock'
+  def beats?(other_move)
+    self.wins_against.any? { |type| other_move.class == type }
   end
   
-  def lizard?
-    @value == 'lizard'
+end
+
+class Rock < Move
+  def initialize(choice)
+    super(choice)
+    @wins_against = [Lizard, Scissors]
   end
   
-  def spock?
-    @value == 'spock'
-  end
-
-  def >(other_move)
-    (rock? && other_move.scissors?) ||
-      (rock? && other_move.lizard?) ||
-      (paper? && other_move.rock?) ||
-      (paper? && other_move.spock?) ||
-      (scissors? && other_move.paper?) ||
-      (scissors? && other_move.lizard?) ||
-      (spock? && other_move.rock?) ||
-      (spock? && other_move.scissors?) ||
-      (lizard? && other_move.spock?) ||
-      (lizard? && other_move.paper?)
-  end
-
-  def <(other_move)
-    (rock? && other_move.paper?) ||
-      (rock? && other_move.spock?) ||
-      (paper? && other_move.scissors?) ||
-      (paper? && other_move.lizard?) ||
-      (scissors? && other_move.rock?) || 
-      (scissors? && other_move.spock?) ||
-      (spock? && other_move.lizard?) ||
-      (spock? && other_move.paper?) ||
-      (lizard? && other_move.rock?) ||
-      (lizard? && other_move.scissors?) 
-  end
-
   def to_s
-    @value
+    'rock'
   end
 end
+
+class Paper < Move
+  def to_s
+    'paper'
+  end
+  
+  def initialize(choice)
+    super(choice)
+    @wins_against = [Rock, Spock]
+  end
+end
+
+class Scissors < Move
+  def to_s
+    'scissors'
+  end
+  
+  def initialize(choice)
+    super(choice)
+    @wins_against = [Paper, Lizard]
+  end
+end
+
+class Lizard < Move
+  def to_s
+    'lizard'
+  end
+  
+  def initialize(choice)
+    super(choice)
+    @wins_against = [Paper, Spock]
+  end
+end
+
+class Spock < Move
+  def to_s
+    'spock'
+  end
+  
+  def initialize(choice)
+    super(choice)
+    @wins_against = [Rock, Scissors]
+  end
+end
+
+
 
 class Player
   attr_accessor :move, :name, :score
@@ -62,6 +76,21 @@ class Player
   def initialize
     set_name
     @score = 0
+  end
+  
+  def make_choice(choice)
+    case choice
+    when 'rock'
+      Rock.new(choice)
+    when 'paper'
+      Paper.new(choice)
+    when 'scissors'
+      Scissors.new(choice)
+    when 'Lizard'
+      Lizard.new(choice)
+    when 'spock'
+      Spock.new(choice)
+    end
   end
 end
 
@@ -78,7 +107,7 @@ class Human < Player
 
     self.name = n
   end
-
+  
   def choose
     choice = nil
 
@@ -89,7 +118,7 @@ class Human < Player
       puts "Sorry, invalid choice."
     end
 
-    self.move = Move.new(choice, self)
+    self.move = make_choice(choice)
   end
 end
 
@@ -99,14 +128,14 @@ class Computer < Player
   end
 
   def choose
-    self.move = Move.new(Move::VALUES.sample, self)
+    choice = Move::VALUES.sample
+    self.move = make_choice(choice)
+    puts move
   end
 end
 
 class RPSGame
   attr_accessor :human, :computer
-  
-  @@history_of_moves = []
 
   def initialize
     @human = Human.new
@@ -122,28 +151,15 @@ class RPSGame
   end
 
   def display_moves
-    player_move = "#{human.name} chose #{human.move}"
-    @@history_of_moves << player_move
-    puts player_move
-    computer_move = "#{computer.name} chose #{computer.move}"
-    @@history_of_moves << computer_move
-    puts computer_move
-  end
-  
-  def display_history_of_moves
-    puts "History of Moves:"
-    round = 1
-    @@history_of_moves.each_slice(2) do |slice|
-      puts "In round #{round}, #{slice[0]} and #{slice[1]}"
-      round += 1
-    end
+    puts "#{human.name} chose #{human.move}"
+    puts "#{computer.name} chose #{computer.move}"
   end
 
   def display_winner
-    if human.move > computer.move
+    if human.move.beats?(computer.move)
       puts "#{human.name} won this round!"
       human.score += 1
-    elsif human.move < computer.move
+    elsif computer.move.beats?(human.move)
       puts "#{computer.name} won this round"
       computer.score += 1
     else
@@ -190,12 +206,12 @@ class RPSGame
       break unless play_again?
     end
     display_final_score
-    display_history_of_moves
     display_goodbye_message
   end
 end
 
-RPSGame.new.play
-
-
-#keeping score and lizard/spock additions
+# RPSGame.new.play
+liz = Lizard.new('lizard')
+scic = Scissors.new('scissors')
+p (liz.beats?(scic))
+#add a class for each move

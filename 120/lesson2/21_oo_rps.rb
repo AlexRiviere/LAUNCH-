@@ -1,7 +1,7 @@
 class Move
   VALUES = ['rock', 'paper', 'scissors', 'spock', 'lizard']
-  
-  def initialize(value, player)
+  HAL_VALUES = ['rock', 'scissors', 'scissors', 'scissors', 'scissors', 'spock', 'lizard']
+  def initialize(value)
     @value = value
   end
   
@@ -89,7 +89,7 @@ class Human < Player
       puts "Sorry, invalid choice."
     end
 
-    self.move = Move.new(choice, self)
+    self.move = Move.new(choice)
   end
 end
 
@@ -99,7 +99,14 @@ class Computer < Player
   end
 
   def choose
-    self.move = Move.new(Move::VALUES.sample, self)
+    self.move = case self.name
+                when 'R2D2'
+                  Move.new('rock')
+                when 'Hal'
+                  Move.new(Move::HAL_VALUES.sample)
+                when 'Chappie'
+                  Move.new(Move::VALUES.sample)                    
+                end
   end
 end
 

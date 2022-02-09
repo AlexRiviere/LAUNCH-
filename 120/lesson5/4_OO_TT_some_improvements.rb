@@ -8,12 +8,8 @@ class Board
     @squares = {}
     reset
   end
-  
-  def get_square_at(key)
-    @squares[key]
-  end
-  
-  def set_square_at(key, marker)
+    
+  def []=(key, marker)
     @squares[key].marker = marker
   end
   
@@ -40,11 +36,9 @@ class Board
   #return winning marker or return nil
   def winning_marker
     WINNING_LINES.each do |line|
-      if count_human_marker(@squares.values_at(*line)) == 3
-        return TTTGame::HUMAN_MARKER
-      elsif count_computer_marker(@squares.values_at(*line)) == 3
-        return TTTGame::COMPUTER_MARKER
-      end
+      marker = @squares[line[0]].to_s
+      marker = nil if marker == " "
+      return marker if line.all? { |key| @squares[key].to_s == marker }
     end
     nil
   end
@@ -55,15 +49,15 @@ class Board
   
   def draw
     puts "     |     |"
-    puts "  #{get_square_at(1)}  |  #{get_square_at(2)}  |  #{get_square_at(3)}"
+    puts "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]}"
     puts "     |     |"
     puts "-----+-----+-----"    
     puts "     |     |"
-    puts "  #{get_square_at(4)}  |  #{get_square_at(5)}  |  #{get_square_at(6)}"
+    puts "  #{@squares[4]}  |  #{@squares[5]}  |  #{@squares[6]}"
     puts "     |     |"
     puts "-----+-----+-----"
     puts "     |     |"
-    puts "  #{get_square_at(7)}  |  #{get_square_at(8)}  |  #{get_square_at(9)}"
+    puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]}"
     puts "     |     |"
   end
 end
@@ -135,11 +129,11 @@ class TTTGame
       puts "Sorry, that's not a valid choice."
     end
     
-    board.set_square_at(square, human.marker)
+    board[square] = human.marker
   end
 
   def computer_moves
-    board.set_square_at(board.unmarked_keys.sample, computer.marker)
+    board[board.unmarked_keys.sample] = computer.marker
   end
   
   def display_result

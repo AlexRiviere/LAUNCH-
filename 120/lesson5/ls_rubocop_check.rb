@@ -1,3 +1,5 @@
+require "pry"
+
 class Board
   WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                   [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
@@ -32,6 +34,25 @@ class Board
       end
     end
     nil
+  end
+  
+  def is_there_a_threat?
+    #return true if there is a row with two opponents markers and one unmarked
+    WINNING_LINES.each do |line|
+      squares = @squares.values_at(*line).map(&:marker) 
+      return true if squares.count('X') == 2 && squares.count(' ') == 1
+    end
+    false
+  end
+  
+  def which_square_to_defend? 
+    WINNING_LINES.each do |line|
+      squares = @squares.values_at(*line).map(&:marker)
+      if squares.count('X') == 2 && squares.count(' ') == 1
+        index_of_free_space = @squares.values_at(*line).map(&:marker).index(' ') 
+        return line[index_of_free_space]
+      end
+    end
   end
 
   def reset
@@ -191,7 +212,11 @@ class TTTGame
   end
 
   def computer_moves
-    board[board.unmarked_keys.sample] = computer.marker
+    if board.is_there_a_threat?
+      board[board.which_square_to_defend?] = computer.marker 
+    else
+      board[board.unmarked_keys.sample] = computer.marker
+    end
   end
 
   def current_player_moves

@@ -89,9 +89,11 @@ end
 
 class Player
   attr_reader :marker
+  attr_accessor :score
 
   def initialize(marker)
     @marker = marker
+    @score = 0
   end
 end
 
@@ -99,6 +101,7 @@ class TTTGame
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
   FIRST_TO_MOVE = HUMAN_MARKER
+  GAME_WINNING_SCORE = 2
 
   attr_reader :board, :human, :computer
 
@@ -123,6 +126,8 @@ class TTTGame
       display_board
       player_move
       display_result
+      increment_player_score
+      someone_won_the_whole_game? ? display_final_score : display_current_score
       break unless play_again?
       reset
       display_play_again_message
@@ -174,7 +179,7 @@ class TTTGame
   end
 
   def human_moves
-    puts "Choose a square (#{joinor(board.unmarked_keys)}): "
+    puts "Choose a square: #{joinor(board.unmarked_keys)}: "
     square = nil
     loop do
       square = gets.chomp.to_i
@@ -204,12 +209,45 @@ class TTTGame
 
     case board.winning_marker
     when human.marker
-      puts "You won!"
+      puts "You won this round!"
     when computer.marker
-      puts "Computer won!"
+      puts "Computer won this round!"
     else
       puts "It's a tie!"
     end
+  end
+  
+  def increment_player_score
+    case board.winning_marker
+    when human.marker
+      human.score += 1
+    when computer.marker
+      computer.score += 1
+    end
+  end
+  
+  def display_current_score
+    puts "The current score is human: #{human.score} to computer: #{computer.score}"
+  end
+  
+  def display_final_score
+    puts "The FINAL SCORE OF THIS MATCH WAS human: #{human.score} to computer: #{computer.score}"
+    case 
+    when human.score == GAME_WINNING_SCORE
+      puts "You won the whole game!"
+    when computer.score == GAME_WINNING_SCORE
+      puts "The computer won the whole game!"
+    end
+    reset_scores
+  end
+  
+  def reset_scores
+    human.score = 0
+    computer.score = 0
+  end
+  
+  def someone_won_the_whole_game?
+    human.score == GAME_WINNING_SCORE || computer.score == GAME_WINNING_SCORE  
   end
 
   def play_again?

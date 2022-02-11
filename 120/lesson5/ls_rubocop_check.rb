@@ -48,12 +48,12 @@ class Board
     false
   end
     
-  def which_square_to_defend? 
-    get_unmarked_square_in_line_with(TTTGame::HUMAN_MARKER, 2, ' ', 1)
+  def which_square_to_defend?(marker) 
+    get_unmarked_square_in_line_with(marker, 2, ' ', 1)
   end
     
-  def which_square_to_attack?
-    get_unmarked_square_in_line_with(TTTGame::COMPUTER_MARKER, 2, ' ', 1)
+  def which_square_to_attack?(marker)
+    get_unmarked_square_in_line_with(marker, 2, ' ', 1)
   end
 
   def reset
@@ -110,33 +110,32 @@ class Square
 end
 
 class Player
-  attr_reader :marker
   attr_accessor :score
 
-  def initialize(marker)
-    @marker = marker
+  def initialize
     @score = 0
   end
 end
 
 class TTTGame
-  HUMAN_MARKER = "X"
-  COMPUTER_MARKER = "O"
   GAME_WINNING_SCORE = 2
 
-  attr_reader :board, :human, :computer
+  attr_reader :board, :human, :computer, :human_marker, :computer_marker
 
   def initialize
     @board = Board.new
-    @human = Player.new(HUMAN_MARKER)
-    @computer = Player.new(COMPUTER_MARKER)
+    @human = Player.new
+    @computer = Player.new
     @first_to_move = nil
     @current_marker = nil
+    @human_marker = nil
+    @computer_marker = nil
   end
 
   def play
     clear
     display_welcome_message
+    which_marker?
     who_goes_first?
     main_game
     display_goodbye_message
@@ -166,13 +165,21 @@ class TTTGame
       puts "Sorry, you must enter 'me' or 'computer'"
     end
     
-    @first_to_move = if answer == 'me'
-                        HUMAN_MARKER 
-                      else
-                        COMPUTER_MARKER
-                      end
-    
+    @first_to_move = answer == 'me' ? @human_marker : @computer_marker
     @current_marker = @first_to_move
+  end
+  
+  def which_marker?
+    user_marker = nil
+    loop do 
+      puts "Which marker would you like to be? Choose any letter (A-Z) or number (0-9)"
+      user_marker = gets.chomp.upcase
+      break if /[A-Z0-9]/ =~ user_marker
+      puts "Sorry, you must enter a single letter (A-Z) or number (0-9)"
+    end
+    @human_marker = user_marker
+    # only two options for the computer
+    @human_marker == 'X' ? @computer_marker = 'O' : @computer_marker = 'X'
   end
 
   def player_move
@@ -198,11 +205,11 @@ class TTTGame
   end
 
   def human_turn?
-    @current_marker == HUMAN_MARKER
+    @current_marker == @human_marker
   end
 
   def display_board
-    puts "You're a #{human.marker}. Computer is a #{computer.marker}."
+    puts "You're a #{@human_marker}. Computer is a #{@computer_marker}."
     puts ""
     board.draw
     puts ""
@@ -228,28 +235,28 @@ class TTTGame
       puts "Sorry, that's not a valid choice."
     end
 
-    board[square] = human.marker
+    board[square] = @human_marker
   end
 
   def computer_moves
-    if board.which_square_to_attack?
-      board[board.which_square_to_attack?] = computer.marker
-    elsif board.which_square_to_defend?
-      board[board.which_square_to_defend?] = computer.marker 
+    if board.which_square_to_attack?(@computer_marker) 
+      board[board.which_square_to_attack?(@computer_marker)] = @computer_marker
+    elsif board.which_square_to_defend?(@human_marker)
+      board[board.which_square_to_defend?(@human_marker)] = @computer_marker 
     elsif board.unmarked_keys.include?(5)
-      board[5] = computer.marker
+      board[5] = @computer_marker
     else
-      board[board.unmarked_keys.sample] = computer.marker
+      board[board.unmarked_keys.sample] = @computer_marker
     end
   end
 
   def current_player_moves
     if human_turn?
       human_moves
-      @current_marker = COMPUTER_MARKER
+      @current_marker = @computer_marker
     else
       computer_moves
-      @current_marker = HUMAN_MARKER
+      @current_marker = @human_marker
     end
   end
 
@@ -257,9 +264,9 @@ class TTTGame
     clear_screen_and_display_board
 
     case board.winning_marker
-    when human.marker
+    when @human_marker
       puts "You won this round!"
-    when computer.marker
+    when @computer_marker
       puts "Computer won this round!"
     else
       puts "It's a tie!"
@@ -268,9 +275,9 @@ class TTTGame
   
   def increment_player_score
     case board.winning_marker
-    when human.marker
+    when @human_marker
       human.score += 1
-    when computer.marker
+    when @computer_marker
       computer.score += 1
     end
   end

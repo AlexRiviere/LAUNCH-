@@ -35,24 +35,25 @@ class Board
     end
     nil
   end
-  
-  def is_there_a_threat?
-    #return true if there is a row with two opponents markers and one unmarked
-    WINNING_LINES.each do |line|
-      squares = @squares.values_at(*line).map(&:marker) 
-      return true if squares.count('X') == 2 && squares.count(' ') == 1
-    end
-    false
-  end
-  
-  def which_square_to_defend? 
+    
+  def get_unmarked_square_in_line_with(marker1, count1, marker2, count2)
+    #return the square you are looking for or return false
     WINNING_LINES.each do |line|
       squares = @squares.values_at(*line).map(&:marker)
-      if squares.count('X') == 2 && squares.count(' ') == 1
+      if squares.count(marker1) == count1 && squares.count(marker2) == count2
         index_of_free_space = @squares.values_at(*line).map(&:marker).index(' ') 
         return line[index_of_free_space]
       end
     end
+    false
+  end
+    
+  def which_square_to_defend? 
+    get_unmarked_square_in_line_with(TTTGame::HUMAN_MARKER, 2, ' ', 1)
+  end
+    
+  def which_square_to_attack?
+    get_unmarked_square_in_line_with(TTTGame::COMPUTER_MARKER, 2, ' ', 1)
   end
 
   def reset
@@ -212,8 +213,12 @@ class TTTGame
   end
 
   def computer_moves
-    if board.is_there_a_threat?
+    if board.which_square_to_attack?
+      board[board.which_square_to_attack?] = computer.marker
+    elsif board.which_square_to_defend?
       board[board.which_square_to_defend?] = computer.marker 
+    elsif board.unmarked_keys.include?(5)
+      board[5] = computer.marker
     else
       board[board.unmarked_keys.sample] = computer.marker
     end

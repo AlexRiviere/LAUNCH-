@@ -122,7 +122,6 @@ end
 class TTTGame
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = HUMAN_MARKER
   GAME_WINNING_SCORE = 2
 
   attr_reader :board, :human, :computer
@@ -131,12 +130,14 @@ class TTTGame
     @board = Board.new
     @human = Player.new(HUMAN_MARKER)
     @computer = Player.new(COMPUTER_MARKER)
-    @current_marker = FIRST_TO_MOVE
+    @first_to_move = nil
+    @current_marker = nil
   end
 
   def play
     clear
     display_welcome_message
+    who_goes_first?
     main_game
     display_goodbye_message
   end
@@ -154,6 +155,24 @@ class TTTGame
       reset
       display_play_again_message
     end
+  end
+  
+  def who_goes_first?
+    answer = nil
+    loop do 
+      puts "Who would you like to go first? (me/computer)"
+      answer = gets.chomp.downcase
+      break if %w(me computer).include? answer
+      puts "Sorry, you must enter 'me' or 'computer'"
+    end
+    
+    @first_to_move = if answer == 'me'
+                        HUMAN_MARKER 
+                      else
+                        COMPUTER_MARKER
+                      end
+    
+    @current_marker = @first_to_move
   end
 
   def player_move
@@ -298,7 +317,7 @@ class TTTGame
 
   def reset
     board.reset
-    @current_marker = FIRST_TO_MOVE
+    @current_marker = @first_to_move
     clear
   end
 

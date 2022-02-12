@@ -192,7 +192,7 @@ class TTTGame
     loop do
       puts PROMPTS["which_marker"]
       user_marker = gets.chomp.upcase
-      break if /[A-Z0-9]/ =~ user_marker
+      break if /[A-Z0-9]/ =~ user_marker && user_marker.size == 1
       puts PROMPTS["invalid_marker"]
     end
     @human_marker = user_marker

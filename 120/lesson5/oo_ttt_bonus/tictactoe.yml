@@ -1,0 +1,29 @@
+name: "What is your name?"
+
+invalid_name: "Sorry, you must enter a name."
+
+invalid_marker: "Sorry, you must enter a single letter (A-Z) or number (0-9)"
+
+which_marker: "Which marker would you like to be? Choose any letter (A-Z) or number (0-9)"
+
+welcome_message: |+
+            Welcome to Tic Tac Toe! 
+            You will be playing against the computer. 
+            If you win 5 rounds, you win the whole game!
+            
+
+goodbye_message: "Thanks for playing Tic Tac Toe! Goodbye!"
+
+invalid_square: "Sorry, that's not a valid choice."
+
+tie_message: "It's a tie!"
+
+current_score: "The current score is : "
+
+final_score: "The FINAL SCORE OF THIS MATCH WAS: "
+
+play_again?: "Would you like to play again? (y/n)"
+
+invalid_answer: "Sorry, must be y or n"
+
+play_again_message: "Let's play again!"

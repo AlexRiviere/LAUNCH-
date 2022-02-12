@@ -1,5 +1,5 @@
 require 'yaml'
-PROMPTS = YAML.load_file('7_oo_ttt_bonus.yml')
+PROMPTS = YAML.load_file("tictactoe.yml")
 
 class Board
   WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
@@ -124,7 +124,7 @@ class Player
 end
 
 class TTTGame
-  GAME_WINNING_SCORE = 2
+  GAME_WINNING_SCORE = 5
 
   attr_reader :board, :human, :computer, :human_marker, :computer_marker
 
@@ -165,10 +165,10 @@ class TTTGame
 
   def set_names
     loop do
-      puts "What is your name?"
+      puts PROMPTS["name"]
       human.name = gets.chomp
       break unless human.name.empty?
-      puts "Sorry, you must enter a name."
+      puts PROMPTS["invalid_name"]
     end
 
     computer.name = ['R2D2', 'CP3O', 'Hal'].sample
@@ -193,7 +193,7 @@ class TTTGame
       puts PROMPTS["which_marker"]
       user_marker = gets.chomp.upcase
       break if /[A-Z0-9]/ =~ user_marker
-      puts "Sorry, you must enter a single letter (A-Z) or number (0-9)"
+      puts PROMPTS["invalid_marker"]
     end
     @human_marker = user_marker
     # only two options for the computer
@@ -209,12 +209,12 @@ class TTTGame
   end
 
   def display_welcome_message
-    puts "Welcome to Tic Tac Toe!"
+    puts PROMPTS["welcome_message"]
     puts ""
   end
 
   def display_goodbye_message
-    puts "Thanks for playing Tic Tac Toe! Goodbye!"
+    puts PROMPTS["goodbye_message"]
   end
 
   def clear_screen_and_display_board
@@ -250,7 +250,7 @@ class TTTGame
     loop do
       square = gets.chomp.to_i
       break if board.unmarked_keys.include?(square)
-      puts "Sorry, that's not a valid choice."
+      puts PROMPTS["invalid_square"]
     end
 
     board[square] = @human_marker
@@ -287,7 +287,7 @@ class TTTGame
     when @computer_marker
       puts "#{computer.name} won this round!"
     else
-      puts "It's a tie!"
+      puts PROMPTS["tie_message"]
     end
   end
 
@@ -301,12 +301,12 @@ class TTTGame
   end
 
   def display_current_score
-    puts "The current score is : "
+    puts PROMPTS["current_score"]
     puts "#{human.name}: #{human.score} to #{computer.name}: #{computer.score}"
   end
 
   def display_final_score
-    puts "The FINAL SCORE OF THIS MATCH WAS: "
+    puts PROMPTS["final_score"]
     puts "#{human.name}: #{human.score} to #{computer.name}: #{computer.score}"
     display_winner
   end
@@ -332,10 +332,10 @@ class TTTGame
   def play_again?
     answer = nil
     loop do
-      puts "Would you like to play again? (y/n)"
+      puts PROMPTS["play_again?"]
       answer = gets.chomp.downcase
       break if %w(y n).include? answer
-      puts "Sorry, must be y or n"
+      puts PROMPTS["invalid_answer"]
     end
 
     answer == 'y'
@@ -352,7 +352,7 @@ class TTTGame
   end
 
   def display_play_again_message
-    puts "Let's play again!"
+    puts PROMPTS["play_again_message"]
     puts ""
   end
 end

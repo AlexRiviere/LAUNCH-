@@ -9,9 +9,9 @@ module Hand
     @cards_in_hand = []
   end
 
-  def hit(deck)
+  def hit(current_cards)
     display_hit
-    cards_in_hand.concat([deck.deck.shuffle!.pop])
+    cards_in_hand.concat([current_cards.deck.shuffle!.pop])
   end
   
   def display_hit
@@ -102,7 +102,7 @@ class Deck
   def deal(participant)
     participant.cards_in_hand.concat(deck.shuffle!.pop(2))
   end
-
+  
   def reset
     SUITS.product(VALUES).map { |card_arr| Card.new(card_arr[0], card_arr[1]) }
   end

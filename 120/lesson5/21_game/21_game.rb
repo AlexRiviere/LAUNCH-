@@ -13,10 +13,10 @@ module Hand
     display_hit
     cards_in_hand.concat([current_cards.deck.shuffle!.pop])
   end
-  
+
   def display_hit
     puts "#{name} chose to hit."
-    puts ""    
+    puts ""
   end
 
   def stay
@@ -102,7 +102,7 @@ class Deck
   def deal(participant)
     participant.cards_in_hand.concat(deck.shuffle!.pop(2))
   end
-  
+
   def reset
     SUITS.product(VALUES).map { |card_arr| Card.new(card_arr[0], card_arr[1]) }
   end
@@ -222,7 +222,7 @@ class TwentyOneGame
       puts PROMPTS["invalid_answer"]
     end
   end
-  
+
   def player_turn
     loop do
       puts PROMPTS["stay_or_hit"]

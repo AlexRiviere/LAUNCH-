@@ -9,13 +9,19 @@ module Hand
     @cards_in_hand = []
   end
 
-  def hit(deck, participant)
-    puts "#{participant.name} chose to hit."
+  def hit(deck)
+    display_hit
     cards_in_hand.concat([deck.deck.shuffle!.pop])
+  end
+  
+  def display_hit
+    puts "#{name} chose to hit."
+    puts ""    
   end
 
   def stay
-    "#{name} chose to stay."
+    puts "#{name} chose to stay."
+    puts ""
   end
 
   def busted?
@@ -27,8 +33,7 @@ module Hand
   end
 
   def total
-    card_values = get_card_values
-    aces, nums = card_values.partition{|value| value == 'ace' }
+    aces, nums = card_values.partition { |value| value == 'ace' }
     num_aces = aces.size
     current_total = nums.sum
     num_aces == 0 ? (return current_total) : (current_total += (num_aces - 1))
@@ -37,14 +42,18 @@ module Hand
     last_ace_is_eleven > 21 ? last_ace_is_one : last_ace_is_eleven
   end
 
+  def display_total
+    puts "Current total is: #{total}."
+  end
+
   def reset
     @cards_in_hand = []
   end
-  
+
   private
-  
-  def get_card_values
-    cards_in_hand.map  do |card|
+
+  def card_values
+    cards_in_hand.map do |card|
       %w(jack queen king).include?(card.value) ? 10 : card.value
     end
   end
@@ -59,9 +68,8 @@ class Player
   end
 
   def to_s
-    "You have: #{cards_in_hand.join(" | ")}" 
+    "You have: #{cards_in_hand.join(' | ')}."
   end
-
 end
 
 class Dealer
@@ -77,7 +85,7 @@ class Dealer
   end
 
   def show_cards
-    "The dealer has: #{cards_in_hand.join(" | ")}"
+    puts "The dealer has: #{cards_in_hand.join(' | ')}"
   end
 end
 
@@ -96,13 +104,13 @@ class Deck
   end
 
   def reset
-    SUITS.product(VALUES).map { |card_arr| Card.new(card_arr[0], card_arr[1])}
+    SUITS.product(VALUES).map { |card_arr| Card.new(card_arr[0], card_arr[1]) }
   end
 end
 
 class Card
-  attr_accessor :dealt
   attr_reader :value, :suit
+
   def initialize(suit, value)
     @suit = suit
     @value = value
@@ -114,7 +122,7 @@ class Card
   end
 end
 
-class Twenty_One_Game
+class TwentyOneGame
   attr_reader :current_deck, :player, :dealer
 
   def initialize
@@ -126,6 +134,13 @@ class Twenty_One_Game
   def start
     clear
     welcome_message
+    main_game
+    goodbye_message
+  end
+
+  private
+
+  def main_game
     loop do
       deal_cards
       show_initial_cards
@@ -135,15 +150,12 @@ class Twenty_One_Game
       break unless play_again?
       reset
     end
-    goodbye_message
   end
-
-  private
 
   def clear
     system 'clear'
   end
-  
+
   def reset
     clear
     current_deck.reset
@@ -153,18 +165,18 @@ class Twenty_One_Game
 
   def play_again?
     answer = nil
-    loop do 
+    loop do
       puts PROMPTS["play_again?"]
       answer = gets.chomp.downcase
       break if %w(y n).include?(answer)
     end
     answer == 'y'
   end
-  
+
   def display_totals
     puts "The dealer has #{dealer.total}."
     puts "You have #{player.total}"
-    puts ""    
+    puts ""
   end
 
   def compare_totals
@@ -183,43 +195,43 @@ class Twenty_One_Game
       puts ""
     elsif dealer.busted?
       puts PROMPTS["dealer_busted"]
-    else 
+    else
       display_totals
       compare_totals
     end
   end
 
-  def dealer_turn
-    puts dealer.show_cards
-    loop do
-      if dealer.total < 17 || player > dealer
-        dealer.hit(current_deck, dealer)
-        puts dealer.show_cards
-      else
-        dealer.stay
-      end
-      break if (dealer > player && dealer.total >= 17) || dealer.busted?
-    end
+  def dealer_hits
+    dealer.hit(current_deck)
+    dealer.show_cards
   end
 
+  def dealer_turn
+    dealer.show_cards
+    dealer_hits until dealer.total >= 17
+    dealer_hits until dealer.total >= player.total || dealer.busted?
+    dealer.stay unless dealer.busted?
+  end
+
+  def player_make_choice(choice)
+    if choice == 's'
+      player.stay
+    elsif choice == 'h'
+      player.hit(current_deck)
+    else
+      puts PROMPTS["invalid_answer"]
+    end
+  end
+  
   def player_turn
-    answer = nil
     loop do
-      break if player.busted? 
       puts PROMPTS["stay_or_hit"]
       answer = gets.chomp.downcase
-
-      if answer == 's' 
-        puts player.stay
-        break
-      elsif answer == 'h'
-        player.hit(current_deck, player)
-        puts player
-        puts "Your total is #{player.total}"
-      else
-
-        puts PROMPTS["invalid_answer"]
-      end
+      player_make_choice(answer)
+      break if answer == 's'
+      puts player
+      player.display_total
+      break if player.busted?
     end
   end
 
@@ -243,5 +255,5 @@ class Twenty_One_Game
   end
 end
 
-game = Twenty_One_Game.new
+game = TwentyOneGame.new
 game.start

@@ -31,18 +31,19 @@ class Computer < Player
   def choose
     @move = [Rock.new, Paper.new, Scissors.new].sample
   end
-
-  def to_s
-    self.class.to_s.downcase
-  end
 end
 
 class Move
   attr_reader :beats
 
   def >(other)
-    beats.include?(other.class.to_s.downcase)
+    beats.include?(other.to_s)
   end
+  
+  def to_s
+    self.class.to_s.downcase
+  end
+  
 end
 
 class Rock < Move

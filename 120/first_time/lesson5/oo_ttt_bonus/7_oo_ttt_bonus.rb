@@ -1,3 +1,5 @@
+
+
 require 'yaml'
 PROMPTS = YAML.load_file("tictactoe.yml")
 
@@ -171,7 +173,7 @@ class TTTGame
       puts PROMPTS["invalid_name"]
     end
 
-    computer.name = ['R2D2', 'CP3O', 'Hal'].sample
+    computer.name = ['R2D2', 'C3PO', 'Hal'].sample
   end
 
   def who_goes_first?

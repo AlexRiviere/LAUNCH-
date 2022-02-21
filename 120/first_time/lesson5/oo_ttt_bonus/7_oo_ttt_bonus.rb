@@ -142,7 +142,6 @@ end
 
 class Computer < Player
   
-  
   def choose_marker(human_marker)
     # only two options for the computer
     human_marker == 'X' ? 'O' : 'X'
@@ -369,8 +368,17 @@ class TTTGame
 
   def reset
     board.reset
-    @current_marker = @first_to_move
+    alternate_first_to_move
     clear
+  end
+  
+  def alternate_first_to_move
+    @first_to_move =  if @first_to_move == @human_marker
+                        @computer_marker
+                      else
+                        @human_marker
+                      end
+    @current_marker = @first_to_move
   end
 
   def display_play_again_message

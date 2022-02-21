@@ -356,11 +356,11 @@ class TTTGame
     loop do
       puts PROMPTS["play_again?"]
       answer = gets.chomp.downcase
-      break if %w(y n).include? answer
+      break if %w(y yes n no).include? answer
       puts PROMPTS["invalid_answer"]
     end
 
-    answer == 'y'
+    answer == 'y' || answer == 'yes'
   end
 
   def clear

@@ -1,4 +1,3 @@
-require "pry"
 require 'yaml'
 PROMPTS = YAML.load_file("21_game.yml")
 
@@ -195,6 +194,7 @@ class TwentyOneGame
       puts ""
     elsif dealer.busted?
       puts PROMPTS["dealer_busted"]
+      display_totals
     else
       display_totals
       compare_totals

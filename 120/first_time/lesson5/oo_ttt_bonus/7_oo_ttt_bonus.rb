@@ -125,6 +125,30 @@ class Player
   end
 end
 
+class Human < Player
+  
+  def choose_marker
+    marker = nil
+    loop do
+      puts PROMPTS["which_marker"]
+      marker = gets.chomp.upcase
+      break if /[A-Z0-9]/ =~ marker && marker.size == 1
+      puts PROMPTS["invalid_marker"]
+    end
+    
+    marker
+  end
+end
+
+class Computer < Player
+  
+  
+  def choose_marker(human_marker)
+    # only two options for the computer
+    human_marker == 'X' ? 'O' : 'X'
+  end
+end
+
 class TTTGame
   GAME_WINNING_SCORE = 5
 
@@ -132,8 +156,8 @@ class TTTGame
 
   def initialize
     @board = Board.new
-    @human = Player.new
-    @computer = Player.new
+    @human = Human.new
+    @computer = Computer.new
     @first_to_move = nil
     @current_marker = nil
     @human_marker = nil
@@ -144,7 +168,8 @@ class TTTGame
     clear
     display_welcome_message
     set_names
-    which_marker?
+    set_human_marker
+    set_computer_marker
     who_goes_first?
     main_game
     display_goodbye_message
@@ -188,18 +213,13 @@ class TTTGame
     @first_to_move = answer == 'me' ? @human_marker : @computer_marker
     @current_marker = @first_to_move
   end
-
-  def which_marker?
-    user_marker = nil
-    loop do
-      puts PROMPTS["which_marker"]
-      user_marker = gets.chomp.upcase
-      break if /[A-Z0-9]/ =~ user_marker && user_marker.size == 1
-      puts PROMPTS["invalid_marker"]
-    end
-    @human_marker = user_marker
-    # only two options for the computer
-    @computer_marker = @human_marker == 'X' ? 'O' : 'X'
+  
+  def set_human_marker
+    @human_marker = human.choose_marker
+  end
+  
+  def set_computer_marker
+    @computer_marker = computer.choose_marker(@human_marker)
   end
 
   def player_move

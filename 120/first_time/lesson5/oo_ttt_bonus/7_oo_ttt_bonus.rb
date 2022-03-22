@@ -39,11 +39,11 @@ class Board
     nil
   end
 
-  def get_unmarked_square_in_line_with(marker1, count1, marker2, count2)
+  def get_unmarked_square_in_line_with(marker1)
     # return the square you are looking for or return false
     WINNING_LINES.each do |line|
       squares = @squares.values_at(*line).map(&:marker)
-      if squares.count(marker1) == count1 && squares.count(marker2) == count2
+      if squares.count(marker1) == 2 && squares.count(' ') == 1
         free_space_idx = @squares.values_at(*line).map(&:marker).index(' ')
         return line[free_space_idx]
       end
@@ -51,13 +51,13 @@ class Board
     false
   end
 
-  def which_square_to_defend?(marker)
-    get_unmarked_square_in_line_with(marker, 2, ' ', 1)
-  end
+  # def which_square_to_defend?(marker)
+  #   get_unmarked_square_in_line_with(marker, 2, ' ', 1)
+  # end
 
-  def which_square_to_attack?(marker)
-    get_unmarked_square_in_line_with(marker, 2, ' ', 1)
-  end
+  # def which_square_to_attack?(marker)
+  #   get_unmarked_square_in_line_with(marker, 2, ' ', 1)
+  # end
 
   def is_5_open?
     unmarked_keys.include?(5)
@@ -278,10 +278,10 @@ class TTTGame
   end
 
   def computer_moves
-    if board.which_square_to_attack?(@computer_marker)
-      board[board.which_square_to_attack?(@computer_marker)] = @computer_marker
-    elsif board.which_square_to_defend?(@human_marker)
-      board[board.which_square_to_defend?(@human_marker)] = @computer_marker
+    if board.get_unmarked_square_in_line_with(@computer_marker)
+      board[board.get_unmarked_square_in_line_with(@computer_marker)] = @computer_marker
+    elsif board.get_unmarked_square_in_line_with(@human_marker)
+      board[board.get_unmarked_square_in_line_with(@human_marker)] = @computer_marker
     elsif board.is_5_open?
       board[5] = @computer_marker
     else

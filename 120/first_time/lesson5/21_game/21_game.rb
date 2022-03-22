@@ -8,14 +8,8 @@ module Hand
     @cards_in_hand = []
   end
 
-  def hit(current_cards)
-    display_hit
-    cards_in_hand.concat([current_cards.deck.shuffle!.pop])
-  end
-
-  def display_hit
-    puts "#{name} chose to hit."
-    puts ""
+  def <<(card)
+    cards_in_hand << card
   end
 
   def stay
@@ -101,6 +95,10 @@ class Deck
   def deal(participant)
     participant.cards_in_hand.concat(deck.shuffle!.pop(2))
   end
+  
+  def deal_one_card
+    deck.shuffle!.pop
+  end
 
   def reset
     SUITS.product(VALUES).map { |card_arr| Card.new(card_arr[0], card_arr[1]) }
@@ -113,7 +111,6 @@ class Card
   def initialize(suit, value)
     @suit = suit
     @value = value
-    @dealt = false
   end
 
   def to_s
@@ -202,7 +199,8 @@ class TwentyOneGame
   end
 
   def dealer_hits
-    dealer.hit(current_deck)
+    dealer << @current_deck.deal_one_card
+    display_dealer_hit
     dealer.show_cards
   end
 
@@ -217,11 +215,22 @@ class TwentyOneGame
     if choice == 's'
       player.stay
     elsif choice == 'h'
-      player.hit(current_deck)
+      player << @current_deck.deal_one_card
     else
       puts PROMPTS["invalid_answer"]
     end
   end
+  
+  def display_player_hit
+    puts "You chose to hit."
+    puts ""
+  end
+  
+  def display_dealer_hit
+    puts "The dealer chose to hit."
+    puts ""
+  end
+  
 
   def player_turn
     loop do
@@ -229,7 +238,9 @@ class TwentyOneGame
       answer = gets.chomp.downcase
       player_make_choice(answer)
       break if answer == 's'
+      clear
       puts player
+      display_player_hit
       player.display_total
       break if player.busted?
     end

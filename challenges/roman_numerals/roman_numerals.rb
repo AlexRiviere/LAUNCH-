@@ -82,35 +82,9 @@ helper method
 
 Post-problem questions
 what you liked from 2 other student's solutions
+- put all of them in a hash with the nine and fours, then iterate over the hash and subtract from the given
+- more numbers in the hash made it a lot cleaner, don't be afraid of that
 =end
-
-
-
-# p separator(5, 0) == 5
-# p separator(5, 1) == 50
-# p separator(5, 2) == 500
-# p separator(5, 3) == 5000
-require 'pry'
-
-def convert_to_roman(number)
-  roman = ''
-  numbers = ROMAN.keys
-  amount_left = number
-  while amount_left > 0
-    if FOURS_AND_NINES.keys.include?(amount_left)
-      roman << FOURS_AND_NINES[amount_left]
-      amount_left = 0
-    else
-      numeral_key = numbers.select{ |num| num <= amount_left }.max
-      amount_left -= numeral_key
-      roman << ROMAN[numeral_key]
-    end
-  end
-  roman
-end
-
-
-
 
 class RomanNumeral
   
@@ -166,5 +140,3 @@ class RomanNumeral
   end
   
 end
-
-p RomanNumeral.new(1948).to_roman

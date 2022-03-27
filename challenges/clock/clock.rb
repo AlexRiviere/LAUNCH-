@@ -46,12 +46,8 @@ class Clock
   end
   
   def initialize(times)
-    if times.size == 2
       @hour, @minutes = times
-    else
-      @hour = times[0]
-      @minutes = 0
-    end
+      @minutes = 0 if @minutes.nil?
   end
   
   def to_s

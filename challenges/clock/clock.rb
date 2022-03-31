@@ -34,6 +34,12 @@ initial thoughts/questions/look at tests and names of tests
 
 Post-problem questions
 what you liked from 2 other student's solutions
+- one call to format
+- everything from minutes
+- checked minutes and hours for other #==
+- use default for minutes
+- break it down to minutes first, hours are just afterthought
+
 =end
 
 
@@ -42,7 +48,7 @@ require 'pry'
 class Clock
   
   def self.at(*times)
-    self.new(times)
+    new(times)
   end
   
   def initialize(times)
@@ -51,25 +57,21 @@ class Clock
   end
   
   def to_s
-    hour_format = @hour.to_s.length == 2 ? @hour : ('0' + @hour.to_s)
-    minutes_format = @minutes.to_s.length == 2 ? @minutes : ('0' + @minutes.to_s)
-    "#{hour_format}:#{minutes_format}"
+    "#{format("%02i", @hour)}:#{format("%02i", @minutes)}"
   end
   
   def +(minutes)
     hours, minutes = minutes.divmod(60)
-    @hour += hours 
-    @minutes += minutes
+    add_or_sub_time(hours, minutes)
     adjust_added_time
-    Clock.at(@hour, @minutes)
+    create_new_object
   end
   
   def -(minutes)
-    hours, minutes = minutes.divmod(60)
-    @hour -= hours 
-    @minutes -= minutes
+    hours, minutes = minutes.divmod(60).map { |x| x * -1 }
+    add_or_sub_time(hours, minutes)
     adjust_subtracted_time
-    Clock.at(@hour, @minutes)
+    create_new_object
   end
   
   def ==(other)
@@ -78,6 +80,16 @@ class Clock
   
   private
   
+  def create_new_object
+    Clock.at(@hour, @minutes)
+  end
+
+  def add_or_sub_time(hours, minutes)
+    @hour += hours 
+    @minutes += minutes
+  end
+
+
   def adjust_subtracted_time
     adjust_subtracted_minutes
     adjust_subtracted_hours

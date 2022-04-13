@@ -1,13 +1,127 @@
-array = ['a', 'b', 'c']
+a = 1
 
-def method_2
+def method
   yield
-  array.each { |let| puts let }
+  puts a
 end
 
-method_2 do
-  array.each { |let| puts let }
-end
+proc = Proc.new { puts a} 
+
+proc.call # => this prints 1
+
+method(&proc) # => this also prints 1
+
+method # => this throws an error
+
+
+
+# def a_method(&block)
+#   block.call
+# end
+
+# a_method{puts "hello" } # => prints "hello"
+
+
+
+
+
+
+# a = 1
+
+# def method
+#   yield
+#   puts a
+# end
+
+# proc = Proc.new { puts a} 
+
+# proc.call # => this prints 1
+
+# method(&proc) # => this also prints 1
+
+# method # => this throws an error
+# a = 1
+
+# def method
+#   puts a
+# end
+
+# proc = Proc.new { puts a} 
+
+# proc.call # => this also prints 1
+
+# method # => this throws an error
+
+# a = 1
+
+# def method
+#   proc.call # => this prints 1
+#   puts a
+# end
+
+# proc = Proc.new { puts a} 
+
+# proc.call # => this also prints 1
+
+# method # => this throws an error
+
+# a = 1
+
+# def method
+#   puts a
+# end
+
+# proc = Proc.new { puts a} 
+
+# proc.call # => this prints 1
+
+# method # => this throws an error
+
+
+# def method(&block)
+#     block.call
+# end
+
+# method { puts "hello" }
+
+
+# def method
+#   yield(1)
+# end
+
+# method { |a, b| puts "#{a} and #{b}"}
+
+
+
+# def method(&block)
+#     block.call
+# end
+
+# method { puts "hello" } # => prints "hello"
+
+# a = 1
+
+# def method
+#   puts a
+# end
+
+# # method # => this throws an error
+
+
+# proc = Proc.new { puts a} 
+
+# proc.call # => this prints 1
+
+# array = ['a', 'b', 'c']
+
+# def method_2
+#   yield
+#   array.each { |let| puts let }
+# end
+
+# method_2 do
+#   array.each { |let| puts let }
+# end
 
 
 

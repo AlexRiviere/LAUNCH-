@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Nutrition Facts</title>
+    <meta charset="utf-8" />
+		<style>
+
+			/* Outside table formatting */
+
+			html, body {
+				font-family: Helvetica, Arial, sans-serif;
+				font-size: 28px;
+			}
+
+			article {
+				border: 2px solid black;
+				padding: 10px;
+				width: 650px;
+			}
+
+			h1 {
+				font-size: 2rem;
+				padding: 0;
+				margin: 0;
+			}
+			
+			/* table formatting */
+			table {
+				
+				border-collapse: collapse;
+				padding: 10px;
+				width: 640px;
+			}
+			
+			th {
+				font-family: "Franklin Gothic Heavy";
+				font-size: 2rem;
+				text-align: left;
+			}
+
+			td {
+				padding-top: 2.5px;
+			}
+
+			/* formatting amount per serving and calories lines */
+
+			tbody :nth-child(2) td, tbody :first-child td {
+				padding: 7px 0;
+			}
+			/* thick line separators */
+			
+			thead :nth-child(2) td {
+				border-bottom: 30px solid black;
+			}
+
+			tbody :nth-child(2) td {
+				border-bottom: 15px solid black;
+			}
+
+			tbody :nth-child(12) td {
+				border-bottom: 20px solid black;
+			}
+
+			/* Aligning sub categories and percentages*/
+			tbody :nth-child(2) td:nth-child(2) {
+				text-align: right;
+			}
+
+			tbody :nth-child(3) td {
+				border-bottom: 1px solid black;
+				text-align: right;
+			}
+
+			tbody tr:nth-child(5) td:nth-child(3), tbody tr:nth-child(10) td:nth-child(3) {
+				text-align: right;
+			} 
+
+			tbody tr:nth-child(6) td:nth-child(2), tbody tr:nth-child(11) td:nth-child(2), tbody tr:nth-child(5) td:nth-child(2), tbody tr:nth-child(10) td:nth-child(2)  {
+				text-align: left;
+			}
+
+			tbody tr td:nth-child(2) {
+				text-align: right;
+			}
+
+			td.indent {
+				border-top: none;
+				width: 10px;
+			}
+			
+
+			/* thin bottom borders */
+
+			tbody tr td {
+				border-top: 1px solid black;
+			}
+
+			/* formatting Percent Daily Values paragraph */
+			p {
+				font-size: 0.9rem;
+				padding-left: 10px;
+				margin-top: 15px;
+				text-indent: -0.6rem;
+			}
+
+			tbody :last-child td {
+				border-bottom: 0px;
+			}
+
+			/* formatting table footer */
+			tfoot {
+				font-size: .8rem;
+			}
+
+			tfoot :first-child td {
+				border-bottom: 0.5px solid black;
+			}
+			
+			tfoot :first-child td:first-child {
+				padding-left: 30%;
+			}
+
+			tfoot tr:nth-child(2) td:nth-child(2), tfoot tr:nth-child(3) td:nth-child(2), tfoot tr:nth-child(4) td:nth-child(2), tfoot tr:nth-child(5) td:nth-child(2)  {
+				padding-left: 12%;
+			}
+
+			tfoot tr:nth-child(3) :first-child, tfoot tr:nth-child(7) :first-child {
+				text-indent: 1.2rem;
+			}
+		</style>
+  </head>
+  <body>
+		<article>
+			<h1>Nutrition Facts</h1>
+			<table>
+				<thead>
+					<tr>
+						<td colspan="4">Serving Size 2/3 cup (55g)</td>
+					</tr>
+					
+					<tr>
+						<td colspan="4">Servings Per Container About 8</td>
+					</tr>
+				</thead>
+
+				<tbody>
+					
+					<!-- Amount per serving rows -->
+					<tr>
+						<td colspan="4"><strong>Amount Per Serving</strong></td>
+					</tr>
+					<tr>
+						<td colspan="2"><strong>Calories</strong> 230</td>
+						<td class="s" colspan="2">Calories from Fat 40</td>
+					</tr>
+					
+					<!-- % daily value rows -->
+					<tr>
+						<td colspan="4"><strong>% Daily Value*</strong></td>
+					</tr>
+					<tr>
+						<td colspan="2"><strong>Total Fat</strong> 8g</td>
+						<td colspan="2"><strong>12%</strong></td>
+					</tr>
+					<tr>
+						<td class="indent"></td>
+						<td>Saturated Fat 1g</td>
+						<td colspan="2"><strong>5%</strong></td>
+					</tr>
+					<tr>
+						<td class="indent"></td>
+						<td colspan="3">Trans Fat 0g</td>
+					</tr>
+					<tr>
+						<td colspan="2"><strong>Cholesterol</strong> 0mg</td>
+						<td colspan="2"><strong>0%</strong></td>
+					</tr>
+					<tr>
+						<td colspan="2"><strong>Sodium</strong> 160mg</td>
+						<td colspan="2"><strong>7%</strong></td>
+					</tr>
+					<tr>
+						<td colspan="2"><strong>Total Carbohydrate</strong> 37g</td>
+						<td colspan="2"><strong>12%</strong></td>
+					</tr>
+					<tr>
+						<td class="indent"></td>
+						<td colspan="1">Dietary Fiber 4g</td>
+						<td colspan="2"><strong>16%</strong></td>
+					</tr>
+					<tr>
+						<td class="indent"></td>
+						<td colspan="3">Sugars 1g</td>
+					</tr>
+					<tr>
+						<td colspan="4"><strong>Protein</strong> 3g</td>
+					</tr>
+
+					<!-- vitamin rows -->
+					<tr>
+						<td colspan="2">Vitamin A	</td>
+						<td colspan="2">10%</td>
+					</tr>
+					<tr>
+						<td colspan="2">Vitamin C</td>
+						<td colspan="2">8%</td>
+					</tr>
+					<tr>
+						<td colspan="2">Calcium</td>
+						<td colspan="2">20%</td>
+					</tr>
+					<tr>
+						<td colspan="2">Iron</td>
+						<td colspan="2">45%</td>
+					</tr>
+					<tr>
+						<td colspan="4"><p>* Percent Daily Values are based on a 2,000 calorie diet. Your daily value may be higher or lower depending on your calorie needs.</p></td>
+					</tr>
+				</tbody>
+
+				<tfoot>
+					<tr>
+						<td colspan="2">Calories:</td>
+						<td>2,000</td>
+						<td>2,500</td>
+					</tr>
+					<tr>
+						<td>Total Fat</td>
+						<td>Less than</td>
+						<td>65g</td>
+						<td>80g</td>
+					</tr>
+					<tr>
+						<td>Sat Fat</td>
+						<td>Less than</td>
+						<td>20g</td>
+						<td>25g</td>
+					</tr>
+					<tr>
+						<td>Cholesterol</td>
+						<td>Less than</td>
+						<td>300mg</td>
+						<td>300mg</td>
+					</tr>
+					<tr>
+						<td>Sodium</td>
+						<td>Less than</td>
+						<td>2,400mg</td>
+						<td>2,400mg</td>
+					</tr>
+					<tr>
+						<td colspan="2">Total Carbohydrate</td>
+						<td>300g</td>
+						<td>375g</td>
+					</tr>
+					<tr>
+						<td colspan="2">Dietary Fiber</td>
+						<td>25g</td>
+						<td>30g</td>
+					</tr>
+				</tfoot>
+			</table>	
+		</article>
+	</body>
+</html>
